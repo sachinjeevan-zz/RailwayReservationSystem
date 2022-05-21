@@ -8,7 +8,10 @@ import java.awt.event.ActionListener;
 
 import javax.swing.*;
 
+import com.railways.datahandling.FileDataHandling;
+
 public class UserInterface {
+	
 	
 	private static JButton homeScreenRegisterButton;
 	private static JButton homeScreenLoginButton;
@@ -16,6 +19,7 @@ public class UserInterface {
 	private static JTextField emailTextField;
 	private static JPasswordField passwordTextField;
 	private static JFrame homeScreen;
+	private static JFrame registerScreen;
 	
 	
 	public static JButton getRegisterButton() {
@@ -82,6 +86,14 @@ public class UserInterface {
 		UserInterface.passwordTextField = passwordTextField;
 	}
 
+	public static JFrame getRegisterScreen() {
+		return registerScreen;
+	}
+
+	public static void setRegisterScreen(JFrame registerScreen) {
+		UserInterface.registerScreen = registerScreen;
+	}
+
 	public static JFrame createWindow(String nameOfWindow)
 	{
 		JFrame newWindow = new JFrame(nameOfWindow);
@@ -145,6 +157,7 @@ public class UserInterface {
 	public static void registerScreen()
 	{
 		JFrame registerScreen = UserInterface.createWindow("Railway Reservation Application - register");
+		setRegisterScreen(registerScreen);
 		JLabel emailLabel = UserInterface.createLabel("E-Mail");
 		JLabel passwordLabel = UserInterface.createLabel("Password");
 		JTextField emailTextField = UserInterface.createTextField("example@domain.com");
@@ -188,10 +201,10 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
+				FileDataHandling.userRegisterDetailsWriteinCsv(emailTextField.getText(), passwordTextField.getText());
 				System.out.println(emailTextField.getText());
 				System.out.println(passwordTextField.getText());
 			}
 		});
 	}
-	
-}
+	}
