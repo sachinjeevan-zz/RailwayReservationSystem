@@ -20,7 +20,10 @@ public class UserInterface {
 	private static JPasswordField passwordTextField;
 	private static JFrame homeScreen;
 	private static JFrame registerScreen;
-	
+	private static JDialog userEmailAlreadyExistDialogBox;
+	private static JButton userEmailAlreadyExistOkButton;
+	private static JFrame loginScreen;
+	private static JButton loginScreenLoginButton;
 	
 	public static JButton getRegisterButton() {
 		return homeScreenRegisterButton;
@@ -94,6 +97,38 @@ public class UserInterface {
 		UserInterface.registerScreen = registerScreen;
 	}
 
+	public static JDialog getUserEmailAlreadyExistDialogBox() {
+		return userEmailAlreadyExistDialogBox;
+	}
+
+	public static void setUserEmailAlreadyExistDialogBox(JDialog userEmailAlreadyExistDialogBox) {
+		UserInterface.userEmailAlreadyExistDialogBox = userEmailAlreadyExistDialogBox;
+	}
+
+	public static JButton getUserEmailAlreadyExistOkButton() {
+		return userEmailAlreadyExistOkButton;
+	}
+
+	public static void setUserEmailAlreadyExistOkButton(JButton userEmailAlreadyExistOkButton) {
+		UserInterface.userEmailAlreadyExistOkButton = userEmailAlreadyExistOkButton;
+	}
+
+	public static JFrame getLoginScreen() {
+		return loginScreen;
+	}
+
+	public static void setLoginScreen(JFrame loginScreen) {
+		UserInterface.loginScreen = loginScreen;
+	}
+
+	public static JButton getLoginScreenLoginButton() {
+		return loginScreenLoginButton;
+	}
+
+	public static void setLoginScreenLoginButton(JButton loginScreenLoginButton) {
+		UserInterface.loginScreenLoginButton = loginScreenLoginButton;
+	}
+
 	public static JFrame createWindow(String nameOfWindow)
 	{
 		JFrame newWindow = new JFrame(nameOfWindow);
@@ -142,6 +177,7 @@ public class UserInterface {
 	 	UserInterface.buttonLocation(registerButton, 150, 120);
 	 	UserInterface.buttonLocation(loginButton, 150, 180);
 	 	UserInterface.onClickHomeScreenRegisterButton();
+	 	UserInterface.onClickHomeScreenLoginButton();
 	}
 	
 	public static JLabel createLabel(String nameOfLabel)
@@ -156,6 +192,7 @@ public class UserInterface {
 	
 	public static void registerScreen()
 	{
+		setRegisterScreen(null);
 		JFrame registerScreen = UserInterface.createWindow("Railway Reservation Application - register");
 		setRegisterScreen(registerScreen);
 		JLabel emailLabel = UserInterface.createLabel("E-Mail");
@@ -180,6 +217,33 @@ public class UserInterface {
 		UserInterface.onClickRegisterScreenRegisterButton();
 	}
 	
+	public static void loginScreen()
+	{
+		setLoginScreen(null);
+		JFrame loginScreen = UserInterface.createWindow("Railway Reservation Application - register");
+		setLoginScreen(loginScreen);
+		JLabel emailLabel = UserInterface.createLabel("E-Mail");
+		JLabel passwordLabel = UserInterface.createLabel("Password");
+		JTextField emailTextField = UserInterface.createTextField("example@domain.com");
+		JPasswordField passwordTextField = new JPasswordField("********");
+		JButton loginButton = UserInterface.createButton("Login");
+
+		setEmailTextField(emailTextField);
+		setPasswordTextField(passwordTextField);
+		setLoginScreenLoginButton(loginButton);
+		
+		emailLabel.setBounds(50, 120, 60, 40);
+		passwordLabel.setBounds(50, 180, 60, 40);
+		
+		emailTextField.setBounds(130, 120, 220, 40);
+		passwordTextField.setBounds(130, 180, 220, 40);
+		
+		loginButton.setBounds(150, 240, 100, 40);
+		
+		UserInterface.addButtonToWindow(loginScreen, emailLabel, passwordLabel, emailTextField, passwordTextField, loginButton);
+		UserInterface.onClickLoginScreenLoginButton();
+	}
+	
 	public static void onClickHomeScreenRegisterButton()
 	{
 		homeScreenRegisterButton.addActionListener( new ActionListener()
@@ -193,6 +257,19 @@ public class UserInterface {
 		});
 	}
 	
+	public static void onClickHomeScreenLoginButton()
+	{
+		homeScreenLoginButton.addActionListener( new ActionListener()
+		{
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				homeScreen.setVisible(false);
+				UserInterface.loginScreen();
+			}
+		});
+	}
+	
 	public static void onClickRegisterScreenRegisterButton()
 	{
 		registerScreenRegisterButton.addActionListener( new ActionListener()
@@ -202,9 +279,40 @@ public class UserInterface {
 			public void actionPerformed(ActionEvent e)
 			{
 				FileDataHandling.userRegisterDetailsWriteinCsv(emailTextField.getText(), passwordTextField.getText());
-				System.out.println(emailTextField.getText());
-				System.out.println(passwordTextField.getText());
 			}
 		});
 	}
+	
+	public static void onClickLoginScreenLoginButton()
+	{
+		loginScreenLoginButton.addActionListener( new ActionListener()
+		{
+			@SuppressWarnings("deprecation")
+			@Override
+			public void actionPerformed(ActionEvent e)
+			{
+				if( FileDataHandling.userLoginDetailsReadinCsv(emailTextField.getText(), passwordTextField.getText()) )
+				{
+					JFrame applicationLandingScreen = createWindow("Train Reservation System");
+					JLabel loggedInStatus = new JLabel("Successfully logged in");
+					loggedInStatus.setBounds(125,150,150,50);
+					addButtonToWindow(applicationLandingScreen, loggedInStatus);
+					getLoginScreen().setVisible(false);
+					applicationLandingScreen.setVisible(true);
+				}
+			}
+		});
 	}
+	
+	public static void onClickRegisterScreenDialogBoxOkButton()
+	{
+		userEmailAlreadyExistOkButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				userEmailAlreadyExistDialogBox.setVisible(false);
+				getRegisterScreen().setVisible(false);
+				getHomeScreen().setVisible(true);
+			}
+		});
+	}
+}
