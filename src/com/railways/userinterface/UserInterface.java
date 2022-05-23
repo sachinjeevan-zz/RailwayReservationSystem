@@ -1,18 +1,23 @@
 package com.railways.userinterface;
 
 import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Rectangle;
+import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 
 import com.railways.datahandling.FileDataHandling;
+import com.railways.users.RailwayPassenger;
+import com.railways.users.RailwayPassengerService;
 
-public class UserInterface {
-	
-	
+public class UserInterface 
+{		
 	private static JButton homeScreenRegisterButton;
 	private static JButton homeScreenLoginButton;
 	private static JButton registerScreenRegisterButton;
@@ -24,6 +29,9 @@ public class UserInterface {
 	private static JButton userEmailAlreadyExistOkButton;
 	private static JFrame loginScreen;
 	private static JButton loginScreenLoginButton;
+	private static JDialog userCreatedDialogBox;
+	private static JButton userRegisteredLoginButton;
+	private static JButton userRegisteredHomeButton;
 	
 	public static JButton getRegisterButton() {
 		return homeScreenRegisterButton;
@@ -129,6 +137,30 @@ public class UserInterface {
 		UserInterface.loginScreenLoginButton = loginScreenLoginButton;
 	}
 
+	public static JDialog getUserCreatedDialogBox() {
+		return userCreatedDialogBox;
+	}
+
+	public static void setUserCreatedDialogBox(JDialog userCreatedDialogBox) {
+		UserInterface.userCreatedDialogBox = userCreatedDialogBox;
+	}
+
+	public static JButton getUserRegisteredLoginButton() {
+		return userRegisteredLoginButton;
+	}
+
+	public static void setUserRegisteredLoginButton(JButton userRegisteredLoginButton) {
+		UserInterface.userRegisteredLoginButton = userRegisteredLoginButton;
+	}
+
+	public static JButton getUserRegisteredHomeButton() {
+		return userRegisteredHomeButton;
+	}
+
+	public static void setUserRegisteredHomeButton(JButton userRegisteredHomeButton) {
+		UserInterface.userRegisteredHomeButton = userRegisteredHomeButton;
+	}
+
 	public static JFrame createWindow(String nameOfWindow)
 	{
 		JFrame newWindow = new JFrame(nameOfWindow);
@@ -220,7 +252,7 @@ public class UserInterface {
 	public static void loginScreen()
 	{
 		setLoginScreen(null);
-		JFrame loginScreen = UserInterface.createWindow("Railway Reservation Application - register");
+		JFrame loginScreen = UserInterface.createWindow("Railway Reservation Application - Login");
 		setLoginScreen(loginScreen);
 		JLabel emailLabel = UserInterface.createLabel("E-Mail");
 		JLabel passwordLabel = UserInterface.createLabel("Password");
@@ -278,7 +310,12 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				FileDataHandling.userRegisterDetailsWriteinCsv(emailTextField.getText(), passwordTextField.getText());
+				RailwayPassenger passengerEntity = new RailwayPassenger();
+				passengerEntity.setPassengerMailId(emailTextField.getText());
+				passengerEntity.setPassengerPassword(passwordTextField.getText());
+				RailwayPassengerService railwayPassengerController = new RailwayPassengerService();
+				railwayPassengerController.setPassengerDetails(passengerEntity);
+				
 			}
 		});
 	}
@@ -291,7 +328,7 @@ public class UserInterface {
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				if( FileDataHandling.userLoginDetailsReadinCsv(emailTextField.getText(), passwordTextField.getText()) )
+				if( Boolean.TRUE.equals(FileDataHandling.userLoginDetailsReadinCsv(emailTextField.getText(), passwordTextField.getText())) )
 				{
 					JFrame applicationLandingScreen = createWindow("Train Reservation System");
 					JLabel loggedInStatus = new JLabel("Successfully logged in");
@@ -315,4 +352,60 @@ public class UserInterface {
 			}
 		});
 	}
+	
+	public static void userAlreadyExistDialogBox()
+	{
+		JDialog userExistDialogBox = new JDialog(UserInterface.getRegisterScreen(),"Email already exist",true);
+		UserInterface.setUserEmailAlreadyExistDialogBox(userExistDialogBox);
+		userExistDialogBox.setLayout(new FlowLayout());
+		JButton dialogOkButton = UserInterface.createButton("OK");
+		UserInterface.setUserEmailAlreadyExistOkButton(dialogOkButton);
+		JLabel mailAlreadyExistLabel = new JLabel("Email Already Exist");
+		userExistDialogBox.add(mailAlreadyExistLabel);
+		userExistDialogBox.add(dialogOkButton);
+		userExistDialogBox.setSize(150, 100);
+		UserInterface.onClickRegisterScreenDialogBoxOkButton();
+		userExistDialogBox.setVisible(true);
+	}
+	
+	public static void userAccountSuccessfullyRegisteredDialogBox()
+	{
+		JDialog userCreatedDialogBox = new JDialog(UserInterface.getRegisterScreen(),"Email already exist",true);
+		UserInterface.setUserCreatedDialogBox(userCreatedDialogBox);
+		userCreatedDialogBox.setLayout(new FlowLayout());
+		JButton dialogLoginButton = UserInterface.createButton("Login Page");
+		JButton dialogHomeButton = UserInterface.createButton("Home Page");
+		UserInterface.setUserRegisteredLoginButton(dialogLoginButton);
+		UserInterface.setUserRegisteredHomeButton(dialogHomeButton);
+		JLabel userAccountSuccessfullyCreatedLabel = new JLabel("Account is successfully registered");
+		userCreatedDialogBox.add(userAccountSuccessfullyCreatedLabel);
+		userCreatedDialogBox.add(dialogLoginButton);
+		userCreatedDialogBox.add(dialogHomeButton);
+		userCreatedDialogBox.setSize(250, 200);
+		onClickAnyButtonInAccountCreationDialogBox();
+		userCreatedDialogBox.setVisible(true);
+	}
+	
+	public static void onClickAnyButtonInAccountCreationDialogBox()
+	{
+		userRegisteredLoginButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				userCreatedDialogBox.setVisible(false);
+				getRegisterScreen().setVisible(false);
+				loginScreen();
+			}
+		});
+		
+		userRegisteredHomeButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				userCreatedDialogBox.setVisible(false);
+				getRegisterScreen().setVisible(false);
+				getHomeScreen().setVisible(true);
+			}
+		});
+	}
+	
+	
 }

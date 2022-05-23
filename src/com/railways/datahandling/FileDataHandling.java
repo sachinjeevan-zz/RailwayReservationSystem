@@ -1,8 +1,5 @@
 package com.railways.datahandling;
 
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -11,15 +8,18 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-
-import com.railways.userinterface.UserInterface;
+import com.railways.users.RailwayPassenger;
 
 public class FileDataHandling {
 	
+	private static final String passengerCsvUrl =  "C:\\Users\\Sachin Jeevan\\Desktop\\RailwayReservation\\PassengerDetails.csv";
+	
+	public static String getPassengercsvurl() {
+		return passengerCsvUrl;
+	}
+
 	private static ArrayList<String> retrieveUserDataFromCsvColumn(FileReader userFileReader, Integer columnNumber)
 	{
 			BufferedReader userBufferedReader = new BufferedReader(userFileReader);
@@ -52,7 +52,7 @@ public class FileDataHandling {
 	
 	private static HashMap<String,String> retrieveUserMailAndPassword(FileReader userFileReader)
 	{
-		HashMap<String,String> userEmailPasswordMap = new HashMap<String, String>();
+		HashMap<String,String> userEmailPasswordMap = new HashMap<>();
 		BufferedReader userBufferedReader = new BufferedReader(userFileReader);
 		try {
 			userBufferedReader.readLine();
@@ -73,14 +73,32 @@ public class FileDataHandling {
 		return userEmailPasswordMap;
 	}
 	
-	public static void userRegisterDetailsWriteinCsv(String userMailId, String userPassword)
+	public static void insertRowInPassengerCsv(RailwayPassenger passengerDetails) 
 	{
-		FileWriter userFileWriter = null;
-		FileReader userFileReader = null;
-		try
+		try(FileWriter userFileWriter = new FileWriter(getPassengercsvurl()) ) 
 		{
-			File userFile = new File("C:\\Users\\Sachin Jeevan\\Desktop\\RailwayReservation\\PassengerDetails.csv");
-			userFileWriter = new FileWriter(userFile,true);
+			userFileWriter.append("\n");
+			userFileWriter.append(passengerDetails.getPassengerId()+",");
+			userFileWriter.append(passengerDetails.getPassengerName()+",");
+			userFileWriter.append(passengerDetails.getPassengerMailId()+",");
+			userFileWriter.append(passengerDetails.getPassengerPassword()+",");
+			userFileWriter.append(passengerDetails.getPassengerGender()+",");
+			userFileWriter.append(passengerDetails.getPassengerAge()+",");
+			userFileWriter.append(passengerDetails.getPassengerMobileNumber()+",");
+			userFileWriter.flush();
+		} 
+		catch (IOException e) {
+			
+		}
+	}
+	
+	public static List<String> userRegisterDetailsWriteinCsv()
+	{
+		FileReader userFileReader = null;
+		ArrayList<String> userMailIds = null;
+		File userFile = new File(getPassengercsvurl());
+		try(FileWriter userFileWriter = new FileWriter(userFile,true))
+		{
 			if(userFile.length() == 0 )
 			{
 				userFileWriter.append("passengerId,");
@@ -92,58 +110,22 @@ public class FileDataHandling {
 				userFileWriter.append("passengerMobileNumber,");
 			}
 			userFileReader = new FileReader(userFile);
-			ArrayList<String> userMailIds = retrieveUserDataFromCsvColumn(userFileReader, 2);
-			if(!userMailIds.contains(userMailId))
-			{
-				userFileWriter.append("\n");
-				userFileWriter.append(",,"+userMailId+",");
-				userFileWriter.append(userPassword+",");
-				userFileWriter.flush();
-				userFileWriter.close();
-			}
-			else
-			{
-				JDialog userExistDialogBox = new JDialog(UserInterface.getRegisterScreen(),"Email already exist",true);
-				UserInterface.setUserEmailAlreadyExistDialogBox(userExistDialogBox);
-				userExistDialogBox.setLayout(new FlowLayout());
-				JButton dialogOkButton = UserInterface.createButton("OK");
-				UserInterface.setUserEmailAlreadyExistOkButton(dialogOkButton);
-				JLabel mailAlreadyExistLabel = new JLabel("Email Already Exist");
-				userExistDialogBox.add(mailAlreadyExistLabel);
-				userExistDialogBox.add(dialogOkButton);
-				userExistDialogBox.setSize(150, 100);
-				UserInterface.onClickRegisterScreenDialogBoxOkButton();
-				userExistDialogBox.setVisible(true);
-			}
-			
-			
+			userMailIds = retrieveUserDataFromCsvColumn(userFileReader, 2);
 		}
 		catch(IOException f)
 		{
-			System.out.println("There exist a issue with accessing the mentioned file.");
+			
 		}
-		finally
-		{
-			try {
-				userFileWriter.close();
-			} catch (IOException e) {
-
-			}
-			try {
-				userFileReader.close();
-			} catch (IOException e) {
-	
-			}
-		}
+		return userMailIds;
 	}
 	
 	public static Boolean userLoginDetailsReadinCsv(String userMailId, String userPassword)
 	{
-		File userFile = new File("C:\\Users\\Sachin Jeevan\\Desktop\\RailwayReservation\\PassengerDetails.csv");
+		File userFile = new File(getPassengercsvurl());
 		FileReader userFileReader;
 		try {
 			userFileReader = new FileReader(userFile);
-			HashMap userEmailAndPasswordMap = retrieveUserMailAndPassword(userFileReader);
+			HashMap<String,String> userEmailAndPasswordMap = retrieveUserMailAndPassword(userFileReader);
 			if(userEmailAndPasswordMap.containsKey(userMailId) && userEmailAndPasswordMap.get(userMailId).equals(userPassword))
 			{
 				return Boolean.TRUE;
