@@ -2,7 +2,6 @@ package com.railways.datahandling;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -10,7 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.railways.users.RailwayPassenger;
+import com.railways.userinterface.UserInterface;
+import com.railways.users.RailwayPassengerEntity;
 
 public class FileDataHandling {
 	
@@ -29,11 +29,11 @@ public class FileDataHandling {
 				
 			}
 			String lineReadFromCsv;
-			ArrayList<String> userMailIds = new ArrayList<>();
+			ArrayList<String> userColumnData = new ArrayList<>();
 			try {
 				while((lineReadFromCsv = userBufferedReader.readLine())!=null)
 				{
-					userMailIds.add(lineReadFromCsv.split(",")[columnNumber]);
+					userColumnData.add(lineReadFromCsv.split(",")[columnNumber]);
 				}
 			} catch (IOException e) {
 				
@@ -42,11 +42,10 @@ public class FileDataHandling {
 				try {
 					userBufferedReader.close();
 				} catch (IOException e) {
-					
+					UserInterface.contactAdminDialogBox(UserInterface.getLoginScreen());
 				}
-				
 			}
-			return userMailIds;
+			return userColumnData;
 		
 	}
 	
@@ -70,11 +69,20 @@ public class FileDataHandling {
 		} catch (IOException e) {
 			
 		}
+		finally
+		{
+			try {
+				userBufferedReader.close();
+			} catch (IOException e) {
+				
+			}
+		}
 		return userEmailPasswordMap;
 	}
 	
-	public static void insertRowInPassengerCsv(RailwayPassenger passengerDetails) 
+	public static void insertRowInPassengerCsv(RailwayPassengerEntity passengerDetails) 
 	{
+		includeHeaderInPassengerCsv();
 		try(FileWriter userFileWriter = new FileWriter(getPassengercsvurl()) ) 
 		{
 			userFileWriter.append("\n");
@@ -88,14 +96,12 @@ public class FileDataHandling {
 			userFileWriter.flush();
 		} 
 		catch (IOException e) {
-			
+			UserInterface.contactAdminDialogBox(UserInterface.getRegisterScreen());
 		}
 	}
 	
-	public static List<String> userRegisterDetailsWriteinCsv()
+	private static void includeHeaderInPassengerCsv()
 	{
-		FileReader userFileReader = null;
-		ArrayList<String> userMailIds = null;
 		File userFile = new File(getPassengercsvurl());
 		try(FileWriter userFileWriter = new FileWriter(userFile,true))
 		{
@@ -109,12 +115,25 @@ public class FileDataHandling {
 				userFileWriter.append("passengerAge,");
 				userFileWriter.append("passengerMobileNumber,");
 			}
-			userFileReader = new FileReader(userFile);
+		}
+		catch(IOException e)
+		{
+			UserInterface.contactAdminDialogBox(UserInterface.getRegisterScreen());
+		}
+	}
+	
+	public static List<String> extractAllMailIds()
+	{
+		
+		ArrayList<String> userMailIds = null;
+		File userFile = new File(getPassengercsvurl());
+		try(FileReader userFileReader = new FileReader(userFile))
+		{
 			userMailIds = retrieveUserDataFromCsvColumn(userFileReader, 2);
 		}
 		catch(IOException f)
 		{
-			
+			UserInterface.contactAdminDialogBox(UserInterface.getRegisterScreen());
 		}
 		return userMailIds;
 	}
@@ -122,9 +141,8 @@ public class FileDataHandling {
 	public static Boolean userLoginDetailsReadinCsv(String userMailId, String userPassword)
 	{
 		File userFile = new File(getPassengercsvurl());
-		FileReader userFileReader;
-		try {
-			userFileReader = new FileReader(userFile);
+		try(FileReader userFileReader = new FileReader(userFile)) 
+		{
 			HashMap<String,String> userEmailAndPasswordMap = retrieveUserMailAndPassword(userFileReader);
 			if(userEmailAndPasswordMap.containsKey(userMailId) && userEmailAndPasswordMap.get(userMailId).equals(userPassword))
 			{
@@ -132,8 +150,10 @@ public class FileDataHandling {
 			}
 			return Boolean.FALSE;
 			
-		} catch (FileNotFoundException e) {
-			
+		} 
+		catch (IOException e) 
+		{
+			UserInterface.contactAdminDialogBox(UserInterface.getLoginScreen());
 		}
 		return Boolean.FALSE;
 	}

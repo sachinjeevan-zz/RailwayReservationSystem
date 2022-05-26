@@ -13,7 +13,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import com.railways.datahandling.FileDataHandling;
-import com.railways.users.RailwayPassenger;
+import com.railways.users.RailwayPassengerEntity;
 import com.railways.users.RailwayPassengerService;
 
 public class UserInterface 
@@ -32,6 +32,7 @@ public class UserInterface
 	private static JDialog userCreatedDialogBox;
 	private static JButton userRegisteredLoginButton;
 	private static JButton userRegisteredHomeButton;
+	private static JDialog contactAdminDialogBox;
 	
 	public static JButton getRegisterButton() {
 		return homeScreenRegisterButton;
@@ -159,6 +160,14 @@ public class UserInterface
 
 	public static void setUserRegisteredHomeButton(JButton userRegisteredHomeButton) {
 		UserInterface.userRegisteredHomeButton = userRegisteredHomeButton;
+	}
+
+	public static JDialog getContactAdminDialogBox() {
+		return contactAdminDialogBox;
+	}
+
+	public static void setContactAdminDialogBox(JDialog contactAdminDialogBox) {
+		UserInterface.contactAdminDialogBox = contactAdminDialogBox;
 	}
 
 	public static JFrame createWindow(String nameOfWindow)
@@ -310,11 +319,12 @@ public class UserInterface
 			@Override
 			public void actionPerformed(ActionEvent e)
 			{
-				RailwayPassenger passengerEntity = new RailwayPassenger();
+				RailwayPassengerEntity passengerEntity = new RailwayPassengerEntity();
 				passengerEntity.setPassengerMailId(emailTextField.getText());
 				passengerEntity.setPassengerPassword(passwordTextField.getText());
 				RailwayPassengerService railwayPassengerController = new RailwayPassengerService();
 				railwayPassengerController.setPassengerDetails(passengerEntity);
+				railwayPassengerController.passengerAccountCreation();
 				
 			}
 		});
@@ -386,7 +396,7 @@ public class UserInterface
 		userCreatedDialogBox.setVisible(true);
 	}
 	
-	public static void onClickAnyButtonInAccountCreationDialogBox()
+	private static void onClickAnyButtonInAccountCreationDialogBox()
 	{
 		userRegisteredLoginButton.addActionListener(new ActionListener() {
 			@Override
@@ -405,6 +415,30 @@ public class UserInterface
 				getHomeScreen().setVisible(true);
 			}
 		});
+	}
+	
+	private static void onClickOkButtonInContactAdminDialogBox(JButton dialogOkButton)
+	{
+		dialogOkButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getContactAdminDialogBox().setVisible(false);
+			}
+		});
+	}
+	
+	public static void contactAdminDialogBox(JFrame currentScreen)
+	{
+		JDialog railwayContactAdminDialogBox = new JDialog(currentScreen,"Contact Administrator",true);
+		UserInterface.setContactAdminDialogBox(railwayContactAdminDialogBox);
+		railwayContactAdminDialogBox.setLayout(new FlowLayout());
+		JButton dialogOkButton = UserInterface.createButton("OK");
+		JLabel userAccountSuccessfullyCreatedLabel = new JLabel("Please contact administration");
+		railwayContactAdminDialogBox.add(userAccountSuccessfullyCreatedLabel);
+		railwayContactAdminDialogBox.add(dialogOkButton);
+		railwayContactAdminDialogBox.setSize(250, 200);
+		onClickOkButtonInContactAdminDialogBox(dialogOkButton);
+		railwayContactAdminDialogBox.setVisible(true);
 	}
 	
 	

@@ -1,6 +1,6 @@
 package com.railways.users;
 
-public class RailwayPassenger 
+public class RailwayPassengerEntity 
 {
 		private Integer passengerId;
 		private String  passengerName;
