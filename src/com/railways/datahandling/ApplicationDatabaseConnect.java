@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.railways.users.RailwayPassengerEntity;
+import com.railways.users.RailwayUserEntity;
 
 public class ApplicationDatabaseConnect 
 {
@@ -75,10 +75,10 @@ public class ApplicationDatabaseConnect
 		return passengerCredentials;
 	}
 	
-	public static void createPassengerAccount(RailwayPassengerEntity railwayPassenger)
+	public static void createPassengerAccount(RailwayUserEntity railwayPassenger)
 	{
-		String mailId = railwayPassenger.getPassengerMailId();
-		String password = railwayPassenger.getPassengerPassword();
+		String mailId = railwayPassenger.getRailwayUserMailId();
+		String password = railwayPassenger.getRailwayUserPassword();
 		String queryString = "insert into railway_passengers(passenger_mail_id,passenger_password) values('"
 				+ mailId + "','"+ password+"');";
 		try {
@@ -90,8 +90,24 @@ public class ApplicationDatabaseConnect
 		
 	}
 	
-	public static void checkLoginCredentials()
+	public static Boolean checkLoginCredentials(RailwayUserEntity railwayPassenger)
 	{
+		String passengerMailId = railwayPassenger.getRailwayUserMailId();
+		String passengerPassword = railwayPassenger.getRailwayUserPassword();
+		
+		String queryString = "select * from railway_passengers where passenger_mail_id='"
+				+ passengerMailId + "' AND passenger_password='"
+						+ passengerPassword+ "';";
+		
+		try {
+			Statement statementObject = appDbConnect.createStatement();
+			statementObject.execute(queryString);
+			return statementObject.getResultSet().first();
+		} catch (SQLException e) {
+			
+		}
+		
+		return Boolean.FALSE;
 		
 	}
 	

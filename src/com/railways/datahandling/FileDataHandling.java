@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.railways.userinterface.UserInterface;
-import com.railways.users.RailwayPassengerEntity;
+import com.railways.userinterface.RailwayUserRegisterAndLoginView;
+import com.railways.users.RailwayUserEntity;
 
 public class FileDataHandling {
 	
@@ -42,7 +42,7 @@ public class FileDataHandling {
 				try {
 					userBufferedReader.close();
 				} catch (IOException e) {
-					UserInterface.contactAdminDialogBox(UserInterface.getLoginScreen());
+					RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getLoginScreen());
 				}
 			}
 			return userColumnData;
@@ -80,23 +80,23 @@ public class FileDataHandling {
 		return userEmailPasswordMap;
 	}
 	
-	public static void insertRowInPassengerCsv(RailwayPassengerEntity passengerDetails) 
+	public static void insertRowInPassengerCsv(RailwayUserEntity passengerDetails) 
 	{
 		includeHeaderInPassengerCsv();
 		try(FileWriter userFileWriter = new FileWriter(getPassengercsvurl()) ) 
 		{
 			userFileWriter.append("\n");
-			userFileWriter.append(passengerDetails.getPassengerId()+",");
-			userFileWriter.append(passengerDetails.getPassengerName()+",");
-			userFileWriter.append(passengerDetails.getPassengerMailId()+",");
-			userFileWriter.append(passengerDetails.getPassengerPassword()+",");
-			userFileWriter.append(passengerDetails.getPassengerGender()+",");
-			userFileWriter.append(passengerDetails.getPassengerAge()+",");
-			userFileWriter.append(passengerDetails.getPassengerMobileNumber()+",");
+			userFileWriter.append(passengerDetails.getRailwayUserId()+",");
+			userFileWriter.append(passengerDetails.getRailwayUserName()+",");
+			userFileWriter.append(passengerDetails.getRailwayUserMailId()+",");
+			userFileWriter.append(passengerDetails.getRailwayUserPassword()+",");
+			userFileWriter.append(passengerDetails.getRailwayUserGender()+",");
+			userFileWriter.append(passengerDetails.getRailwayUserAge()+",");
+			userFileWriter.append(passengerDetails.getRailwayUserMobileNumber()+",");
 			userFileWriter.flush();
 		} 
 		catch (IOException e) {
-			UserInterface.contactAdminDialogBox(UserInterface.getRegisterScreen());
+			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getRegisterScreen());
 		}
 	}
 	
@@ -118,7 +118,7 @@ public class FileDataHandling {
 		}
 		catch(IOException e)
 		{
-			UserInterface.contactAdminDialogBox(UserInterface.getRegisterScreen());
+			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getRegisterScreen());
 		}
 	}
 	
@@ -133,7 +133,7 @@ public class FileDataHandling {
 		}
 		catch(IOException f)
 		{
-			UserInterface.contactAdminDialogBox(UserInterface.getRegisterScreen());
+			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getRegisterScreen());
 		}
 		return userMailIds;
 	}
@@ -153,7 +153,7 @@ public class FileDataHandling {
 		} 
 		catch (IOException e) 
 		{
-			UserInterface.contactAdminDialogBox(UserInterface.getLoginScreen());
+			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getLoginScreen());
 		}
 		return Boolean.FALSE;
 	}

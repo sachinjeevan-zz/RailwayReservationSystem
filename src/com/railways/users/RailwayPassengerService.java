@@ -5,32 +5,44 @@ import java.util.List;
 
 import com.railways.datahandling.ApplicationDatabaseConnect;
 import com.railways.datahandling.FileDataHandling;
-import com.railways.userinterface.UserInterface;
+import com.railways.userinterface.RailwayUserRegisterAndLoginView;
 
 public class RailwayPassengerService {
-	private RailwayPassengerEntity  passengerDetails;
+	private RailwayUserEntity  passengerDetails;
 
-	public RailwayPassengerEntity getPassengerDetails() {
+	public RailwayUserEntity getPassengerDetails() {
 		return passengerDetails;
 	}
 
-	public void setPassengerDetails(RailwayPassengerEntity passengerDetails) {
+	public void setPassengerDetails(RailwayUserEntity passengerDetails) {
 		this.passengerDetails = passengerDetails;
 	}
 	
 	public void passengerAccountCreation()
 	{
 		List<String> passengerMailIds =  ApplicationDatabaseConnect.extractMailIdsFromPassengerTable();
-		String mailId = passengerDetails.getPassengerMailId();
+		String mailId = passengerDetails.getRailwayUserMailId();
 		
 		if(!passengerMailIds.contains(mailId))
 		{
 			ApplicationDatabaseConnect.createPassengerAccount(passengerDetails);
-			UserInterface.userAccountSuccessfullyRegisteredDialogBox();
+			RailwayUserRegisterAndLoginView.userAccountSuccessfullyRegisteredDialogBox();
 		}
 		else
 		{
-			UserInterface.userAlreadyExistDialogBox();
+			RailwayUserRegisterAndLoginView.userAlreadyExistDialogBox();
+		}
+	}
+	
+	public void passengerLoginAccess()
+	{
+		if(ApplicationDatabaseConnect.checkLoginCredentials(passengerDetails))
+		{
+			RailwayUserRegisterAndLoginView.applicationLandingPage();
+		}
+		else
+		{
+			RailwayUserRegisterAndLoginView.invalidEmailDialogBox();
 		}
 	}
 	
