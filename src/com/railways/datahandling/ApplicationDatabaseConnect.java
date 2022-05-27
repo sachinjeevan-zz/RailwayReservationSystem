@@ -90,6 +90,11 @@ public class ApplicationDatabaseConnect
 		
 	}
 	
+	public static void checkLoginCredentials()
+	{
+		
+	}
+	
 	@Override
 	public void finalize()
 	{
