@@ -2,8 +2,13 @@ package com.railways.datahandling;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.railways.users.RailwayPassengerEntity;
 
@@ -51,17 +56,23 @@ public class ApplicationDatabaseConnect
 		sqlStatement.execute(createPassengerTableQuery);
 	}
 	
-	public static void extractMailIdsFromPassengerTable()
+	public static List<String> extractMailIdsFromPassengerTable()
 	{
-		String queryString = "select passenger_mail_id, passenger_password from railway_passengers;";
+		String queryString = "select passenger_mail_id from railway_passengers;";
 		Statement statementObject;
+		List<String> passengerCredentials = new ArrayList<>();
 		try {
 			statementObject = appDbConnect.createStatement();
 			statementObject.execute(queryString);
-			System.out.println(statementObject.getResultSet());
+			ResultSet resultSet = statementObject.getResultSet();
+			while(resultSet.next())
+			{
+				passengerCredentials.add(resultSet.getString("passenger_mail_id"));
+			}
 		} catch (SQLException e) {
 			
 		}
+		return passengerCredentials;
 	}
 	
 	public static void createPassengerAccount(RailwayPassengerEntity railwayPassenger)

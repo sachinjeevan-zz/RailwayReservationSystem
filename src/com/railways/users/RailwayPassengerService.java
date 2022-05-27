@@ -20,7 +20,18 @@ public class RailwayPassengerService {
 	
 	public void passengerAccountCreation()
 	{
-		ApplicationDatabaseConnect.createPassengerAccount(passengerDetails);
+		List<String> passengerMailIds =  ApplicationDatabaseConnect.extractMailIdsFromPassengerTable();
+		String mailId = passengerDetails.getPassengerMailId();
+		
+		if(!passengerMailIds.contains(mailId))
+		{
+			ApplicationDatabaseConnect.createPassengerAccount(passengerDetails);
+			UserInterface.userAccountSuccessfullyRegisteredDialogBox();
+		}
+		else
+		{
+			UserInterface.userAlreadyExistDialogBox();
+		}
 	}
 	
 	public static void createPassengerTableSchema()
