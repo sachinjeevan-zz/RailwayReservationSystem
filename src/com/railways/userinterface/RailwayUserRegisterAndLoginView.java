@@ -224,16 +224,6 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		});
 	}
 	
-	public static void applicationLandingPage()
-	{
-		JFrame applicationLandingScreen = createWindow("Train Reservation System");
-		JLabel loggedInStatus = new JLabel("Successfully logged in");
-		loggedInStatus.setBounds(125,150,150,50);
-		addComponentsToWindow(applicationLandingScreen, loggedInStatus);
-		getLoginScreen().setVisible(false);
-		applicationLandingScreen.setVisible(true);
-	}
-	
 	public static void onClickRegisterScreenDialogBoxOkButton()
 	{
 		getUserEmailAlreadyExistOkButton().addActionListener(new ActionListener() {

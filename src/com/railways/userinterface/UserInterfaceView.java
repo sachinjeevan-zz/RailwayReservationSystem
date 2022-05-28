@@ -4,11 +4,14 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
@@ -34,6 +37,10 @@ public class UserInterfaceView {
 	private static JButton passengerButton;
 	private static JButton adminButton;
 	private static JButton bookingAgentButton;
+	private static JPanel toolbarPanel;
+	private static JPanel navigationPanel;
+	private static JPanel workspacePanel;
+	private static Map<String,List<String>> navigatorWorkspaceLabels;
 	
 	public static JButton getRegisterButton() {
 		return homeScreenRegisterButton;
@@ -211,13 +218,50 @@ public class UserInterfaceView {
 		UserInterfaceView.bookingAgentButton = bookingAgentButton;
 	}
 	
-	static JFrame createWindow(String nameOfWindow)
+	public static JPanel getToolbarPanel() {
+		return toolbarPanel;
+	}
+
+	public static void setToolbarPanel(JPanel toolbarPanel) {
+		UserInterfaceView.toolbarPanel = toolbarPanel;
+	}
+
+	public static JPanel getNavigationPanel() {
+		return navigationPanel;
+	}
+
+	public static void setNavigationPanel(JPanel navigationPanel) {
+		UserInterfaceView.navigationPanel = navigationPanel;
+	}
+
+	public static JPanel getWorkspacePanel() {
+		return workspacePanel;
+	}
+
+	public static void setWorkspacePanel(JPanel workspacePanel) {
+		UserInterfaceView.workspacePanel = workspacePanel;
+	}
+
+	public static Map<String, List<String>> getNavigatorWorkspaceLabels() {
+		return navigatorWorkspaceLabels;
+	}
+
+	public static void setNavigatorWorkspaceLabels(Map<String, List<String>> navigatorWorkspaceLabels) {
+		UserInterfaceView.navigatorWorkspaceLabels = navigatorWorkspaceLabels;
+	}
+
+	static JFrame createWindow(String nameOfWindow, int width, int height)
 	{
 		JFrame newWindow = new JFrame(nameOfWindow);
-		newWindow.setSize(400,400);
+		newWindow.setSize(width,height);
 		newWindow.setVisible(true);
 		newWindow.setLayout(null);
 		return newWindow;
+	}
+	
+	static JFrame createWindow(String nameOfWindow)
+	{
+		return createWindow(nameOfWindow, 400, 400);
 	}
 	
 	static JButton createButton(String nameOfButton, int widthOfButton, int heightOfButton)
@@ -278,5 +322,12 @@ public class UserInterfaceView {
 				getContactAdminDialogBox().setVisible(false);
 			}
 		});
+	}
+	
+	static JPanel createPanel(Integer xAxisPanel, Integer yAxisPanel, Integer widthPanel, Integer heightPanel)
+	{
+		JPanel newPanel = new JPanel();
+		newPanel.setBounds(xAxisPanel, yAxisPanel, widthPanel, heightPanel);
+		return newPanel;
 	}
 }

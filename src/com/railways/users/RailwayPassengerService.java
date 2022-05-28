@@ -2,9 +2,12 @@ package com.railways.users;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 import com.railways.datahandling.ApplicationDatabaseConnect;
 import com.railways.datahandling.FileDataHandling;
+import com.railways.navigator.RailwayNavigator;
+import com.railways.userinterface.ApplicationNavigatorWorkspaceView;
 import com.railways.userinterface.RailwayUserRegisterAndLoginView;
 
 public class RailwayPassengerService {
@@ -38,7 +41,9 @@ public class RailwayPassengerService {
 	{
 		if(ApplicationDatabaseConnect.checkLoginCredentials(passengerDetails))
 		{
-			RailwayUserRegisterAndLoginView.applicationLandingPage();
+			ApplicationNavigatorWorkspaceView.navigatorWorkspaceScreen();
+			Map<String,List<String>> navigatorWorkspaceLabels = RailwayNavigator.parseNavigatorXml();
+			ApplicationNavigatorWorkspaceView.addComponentsToNavigator(navigatorWorkspaceLabels);
 		}
 		else
 		{
