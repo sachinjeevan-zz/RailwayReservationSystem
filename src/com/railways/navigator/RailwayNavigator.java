@@ -2,9 +2,7 @@ package com.railways.navigator;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -19,11 +17,11 @@ import org.xml.sax.SAXException;
 
 public class RailwayNavigator {
 	
-	public static Map<String,List<String>> parseNavigatorXml()
+	public static Map<String,Map<String,String>> parseNavigatorXml()
 	{
 		File navigatorXml = new File("C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\xml\\Application.xml");
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		Map<String,List<String>> navigatorWorkspace = new HashMap<>();
+		Map<String,Map<String,String>> navigatorWorkspace = new HashMap<>();
 		try {
 			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 			Document docParser = dBuilder.parse(navigatorXml);
@@ -36,14 +34,14 @@ public class RailwayNavigator {
 				{
 					NamedNodeMap navigatorAttributes = currentNode.getAttributes();
 					NodeList workspaceRef = currentNode.getChildNodes();
-					List<String> workspaceLabelNames = new ArrayList<>();
+					Map<String,String> workspaceLabelNames = new HashMap<>();
 					for(int indexOfWorkspaceIndex=0;indexOfWorkspaceIndex<workspaceRef.getLength();indexOfWorkspaceIndex++)
 					{
 						Node workspaceRefNode = workspaceRef.item(indexOfWorkspaceIndex);
 						if(workspaceRefNode.getNodeType()==Node.ELEMENT_NODE)
 						{
 							NamedNodeMap workspaceAttributes = workspaceRefNode.getAttributes();
-							workspaceLabelNames.add(workspaceAttributes.getNamedItem("label").getNodeValue());
+							workspaceLabelNames.put(workspaceAttributes.getNamedItem("label").getNodeValue(),workspaceAttributes.getNamedItem("icon").getNodeValue());
 						}
 						
 					}

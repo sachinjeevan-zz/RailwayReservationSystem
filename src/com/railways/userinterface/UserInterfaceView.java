@@ -1,19 +1,27 @@
 package com.railways.userinterface;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
 import java.util.Map;
 
+import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicButtonUI;
 
 public class UserInterfaceView {
 	
@@ -40,8 +48,9 @@ public class UserInterfaceView {
 	private static JPanel toolbarPanel;
 	private static JPanel navigationPanel;
 	private static JPanel workspacePanel;
-	private static Map<String,List<String>> navigatorWorkspaceLabels;
-	
+	private static Map<String,Map<String,String>> navigatorWorkspaceLabels;
+	private static JLabel scrollingMessage;
+	private static final String ICON_LOCATION = "C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\icons\\";
 	public static JButton getRegisterButton() {
 		return homeScreenRegisterButton;
 	}
@@ -242,12 +251,24 @@ public class UserInterfaceView {
 		UserInterfaceView.workspacePanel = workspacePanel;
 	}
 
-	public static Map<String, List<String>> getNavigatorWorkspaceLabels() {
+	public static Map<String, Map<String,String>> getNavigatorWorkspaceLabels() {
 		return navigatorWorkspaceLabels;
 	}
 
-	public static void setNavigatorWorkspaceLabels(Map<String, List<String>> navigatorWorkspaceLabels) {
+	public static void setNavigatorWorkspaceLabels(Map<String, Map<String,String>> navigatorWorkspaceLabels) {
 		UserInterfaceView.navigatorWorkspaceLabels = navigatorWorkspaceLabels;
+	}
+
+	public static JLabel getScrollingMessage() {
+		return scrollingMessage;
+	}
+
+	public static void setScrollingMessage(JLabel scrollingMessage) {
+		UserInterfaceView.scrollingMessage = scrollingMessage;
+	}
+
+	public static String getIconLocation() {
+		return ICON_LOCATION;
 	}
 
 	static JFrame createWindow(String nameOfWindow, int width, int height)
@@ -264,16 +285,22 @@ public class UserInterfaceView {
 		return createWindow(nameOfWindow, 400, 400);
 	}
 	
-	static JButton createButton(String nameOfButton, int widthOfButton, int heightOfButton)
+	static JButton createButton(String nameOfButton, int widthOfButton, int heightOfButton,Icon iconImage)
 	{
 		JButton newButton = new JButton(nameOfButton);
 		newButton.setSize(widthOfButton, heightOfButton);
+		newButton.setUI(new StyledButtonUI());
+		newButton.setIcon(iconImage);
 		return newButton;
+	}
+	static JButton createButton(String nameOfButton, Icon iconImage)
+	{
+		return createButton(nameOfButton,100,40,iconImage);
 	}
 	
 	static JButton createButton(String nameOfButton)
 	{
-		return createButton(nameOfButton,100,40);
+		return createButton(nameOfButton,null);
 	}
 	
 	static void buttonLocation(JButton applicationButton,int xAxisLocation,int yAxisLocation)
@@ -326,8 +353,38 @@ public class UserInterfaceView {
 	
 	static JPanel createPanel(Integer xAxisPanel, Integer yAxisPanel, Integer widthPanel, Integer heightPanel)
 	{
-		JPanel newPanel = new JPanel();
+		JPanel newPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		newPanel.setBounds(xAxisPanel, yAxisPanel, widthPanel, heightPanel);
 		return newPanel;
 	}
+
+}
+
+class StyledButtonUI extends BasicButtonUI {
+
+    @Override
+    public void installUI (JComponent c) {
+        super.installUI(c);
+        AbstractButton button = (AbstractButton) c;
+        button.setOpaque(false);
+        button.setBorder(new EmptyBorder(5, 15, 5, 15));
+    }
+
+    @Override
+    public void paint (Graphics g, JComponent c) {
+        AbstractButton b = (AbstractButton) c;
+        paintBackground(g, b, b.getModel().isPressed() ? 2 : 0);
+        super.paint(g, c);
+    }
+
+    private void paintBackground (Graphics g, JComponent c, int yOffset) {
+        Dimension size = c.getSize();
+        Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setColor(c.getBackground().darker());
+        g.fillRoundRect(0, yOffset, size.width, size.height - yOffset, 10, 10);
+        g.setColor(c.getBackground());
+        g.fillRoundRect(0, yOffset, size.width, size.height + yOffset - 5, 10, 10);
+    }
+    
 }

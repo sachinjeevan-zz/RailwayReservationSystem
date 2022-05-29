@@ -1,6 +1,5 @@
 package com.railways.userinterface;
 
-import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import com.railways.users.RailwayBookingAgent;
 import com.railways.users.RailwayPassengerService;
 import com.railways.users.RailwayUserEntity;
 

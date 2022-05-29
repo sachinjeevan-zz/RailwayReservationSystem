@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.railways.datahandling.ApplicationDatabaseConnect;
-import com.railways.datahandling.FileDataHandling;
 import com.railways.navigator.RailwayNavigator;
 import com.railways.userinterface.ApplicationNavigatorWorkspaceView;
+import com.railways.userinterface.MovingTextLabel;
 import com.railways.userinterface.RailwayUserRegisterAndLoginView;
 
 public class RailwayPassengerService {
@@ -42,8 +42,9 @@ public class RailwayPassengerService {
 		if(ApplicationDatabaseConnect.checkLoginCredentials(passengerDetails))
 		{
 			ApplicationNavigatorWorkspaceView.navigatorWorkspaceScreen();
-			Map<String,List<String>> navigatorWorkspaceLabels = RailwayNavigator.parseNavigatorXml();
+			Map<String,Map<String,String>> navigatorWorkspaceLabels = RailwayNavigator.parseNavigatorXml();
 			ApplicationNavigatorWorkspaceView.addComponentsToNavigator(navigatorWorkspaceLabels);
+			new MovingTextLabel();
 		}
 		else
 		{

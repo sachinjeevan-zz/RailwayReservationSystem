@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Menu>
-	<Navigator name="trainDetails" label="Trains">
-		<WorkspaceRef name="displayTrainWorkspace" label="Display Train"/>
-		<WorkspaceRef name="displayStationWorkspace" label="Display Station"/>
-		<WorkspaceRef name="searchTrainWorkspace" label="Search Train"/>
+	<Navigator name="trainDetails" label="Trains" icon="train.png">
+		<WorkspaceRef name="displayTrainWorkspace" label="Display Train" icon="train.png"/>
+		<WorkspaceRef name="displayStationWorkspace" label="Display Station" icon="train.png"/>
+		<WorkspaceRef name="searchTrainWorkspace" label="Search Train" icon="train.png"/>
 	</Navigator>
-	<Navigator name="bookingsDetails" label="Bookings">
-		<WorkspaceRef name="newBookingWorkspace" label="New Booking"></WorkspaceRef>
-		<WorkspaceRef name="myBookingsWorkspace" label="My Bookings"></WorkspaceRef>
-		<WorkspaceRef name="pnrStatusWorkspace" label="Check PNR Status"></WorkspaceRef>
+	<Navigator name="bookingsDetails" label="Bookings" icon="train.png">
+		<WorkspaceRef name="newBookingWorkspace" label="New Booking" icon="train.png"></WorkspaceRef>
+		<WorkspaceRef name="myBookingsWorkspace" label="My Bookings" icon="train.png"></WorkspaceRef>
+		<WorkspaceRef name="pnrStatusWorkspace" label="Check PNR Status" icon="train.png"></WorkspaceRef>
 	</Navigator>
-	<Navigator name="railwayPantry" label="Pantry">
-		<WorkspaceRef name="newOrderWorkspace" label="New Order"></WorkspaceRef>
-		<WorkspaceRef name="menuCardWorkspace" label="Menu Card"></WorkspaceRef>
-		<WorkspaceRef name="foodDeliveryStatus" label="Food Delivery Status"></WorkspaceRef>
+	<Navigator name="railwayPantry" label="Pantry" icon="train.png">
+		<WorkspaceRef name="newOrderWorkspace" label="New Order" icon="train.png"></WorkspaceRef>
+		<WorkspaceRef name="menuCardWorkspace" label="Menu Card" icon="train.png"></WorkspaceRef>
+		<WorkspaceRef name="foodDeliveryStatus" label="Food Delivery Status" icon="train.png"></WorkspaceRef>
 	</Navigator>
-	<Navigator name="accountSettings" label="Account Settings">
-		<WorkspaceRef name="userProfileWorkspace" label="My Profile"></WorkspaceRef>
-		<WorkspaceRef name="updateUserAccountWorkspace" label="Update Profile"></WorkspaceRef>
-		<WorkspaceRef name="aboutUsWorkspace" label="About Us"></WorkspaceRef>
+	<Navigator name="accountSettings" label="Account Settings" icon="train.png">
+		<WorkspaceRef name="userProfileWorkspace" label="My Profile" icon="train.png"></WorkspaceRef>
+		<WorkspaceRef name="updateUserAccountWorkspace" label="Update Profile" icon="train.png"></WorkspaceRef>
+		<WorkspaceRef name="aboutUsWorkspace" label="About Us" icon="train.png"></WorkspaceRef>
 	</Navigator>
 </Menu>
