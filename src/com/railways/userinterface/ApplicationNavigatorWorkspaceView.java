@@ -1,6 +1,7 @@
 package com.railways.userinterface;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,15 +25,15 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 	{
 		JFrame navigatorWorkspaceFrame = createWindow("Train Reservation System",800,600);
 		setNavigatorWorkspaceFrame(navigatorWorkspaceFrame);
-		JPanel navigatorPanel = createPanel(5, 100, 195, 495);
+		JPanel navigatorPanel = createPanel(5, 55, 195, 495);
 		setNavigationPanel(navigatorPanel);
-		navigatorPanel.setBackground(Color.gray);
-		JPanel workspacePanel = createPanel(210, 100, 585, 495);
+		//navigatorPanel.setBackground(Color.gray);
+		JPanel workspacePanel = createPanel(210, 55, 570, 495);
 		setWorkspacePanel(workspacePanel);
-		workspacePanel.setBackground(Color.gray);
-		JPanel toolbarPanel = createPanel(5, 5, 790, 70);
+		//workspacePanel.setBackground(Color.gray);
+		JPanel toolbarPanel = createPanel(5, 5, 770, 30);
 		setToolbarPanel(toolbarPanel);
-		toolbarPanel.setBackground(Color.gray);
+		//toolbarPanel.setBackground(Color.gray);
 		addComponentsToWindow(navigatorWorkspaceFrame, navigatorPanel, toolbarPanel, workspacePanel);
 		getLoginScreen().setVisible(false);
 		navigatorWorkspaceFrame.setVisible(true);
@@ -45,7 +46,7 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 	{
 		setNavigatorWorkspaceLabels(navigatorWorkspaceLabels);
 		Set<String> navigatorLabels = navigatorWorkspaceLabels.keySet();
-		DefaultMutableTreeNode rootMenu = new DefaultMutableTreeNode("Railway Reservation System");
+		DefaultMutableTreeNode rootMenu = new DefaultMutableTreeNode("Ultramain Express");
 		for(String navigatorLabel:navigatorLabels)
 		{
 			DefaultMutableTreeNode navigatorLabelTreeNode = new DefaultMutableTreeNode(navigatorLabel);
@@ -54,6 +55,7 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 		JTree newTree = new JTree(rootMenu);
 		newTree.addTreeSelectionListener(listener(newTree));
 		newTree.setVisible(true);
+		newTree.setFont(new Font(newTree.getFont().getFontName(),  Font.BOLD, 16));
 		getNavigationPanel().add(newTree);	
 	}
 	

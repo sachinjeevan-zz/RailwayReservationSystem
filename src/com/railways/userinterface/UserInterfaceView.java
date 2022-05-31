@@ -1,16 +1,22 @@
 package com.railways.userinterface;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.RoundRectangle2D;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
+import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -20,6 +26,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
 
@@ -301,6 +309,7 @@ public class UserInterfaceView {
 		newButton.setSize(widthOfButton, heightOfButton);
 		newButton.setUI(new StyledButtonUI());
 		newButton.setIcon(iconImage);
+		newButton.setFont(new Font(newButton.getFont().getFontName(),  Font.BOLD, 14));
 		return newButton;
 	}
 	static JButton createButton(String nameOfButton, Icon iconImage)
@@ -330,12 +339,16 @@ public class UserInterfaceView {
 	
 	static JLabel createLabel(String nameOfLabel)
 	{
-		return new JLabel(nameOfLabel);
-	}
+		JLabel newLabel = new JLabel(nameOfLabel);
+		newLabel.setFont(new Font(newLabel.getFont().getFontName(),  Font.BOLD, 13));
+		return newLabel;
+}
 	
 	static JTextField createTextField(String nameOfTextField)
 	{
-		return new JTextField(nameOfTextField);
+		JTextField newTextField = new JTextField(nameOfTextField);
+		newTextField.setFont(new Font(newTextField.getFont().getFontName(),  Font.BOLD, 12));
+		return newTextField;
 	}
 	public static void contactAdminDialogBox(JFrame currentScreen)
 	{
@@ -365,6 +378,8 @@ public class UserInterfaceView {
 	{
 		JPanel newPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 		newPanel.setBounds(xAxisPanel, yAxisPanel, widthPanel, heightPanel);
+		Border blackline = BorderFactory.createLineBorder(Color.GRAY);
+		newPanel.setBorder(blackline);
 		return newPanel;
 	}
 
@@ -397,4 +412,27 @@ class StyledButtonUI extends BasicButtonUI {
         g.fillRoundRect(0, yOffset, size.width, size.height + yOffset - 5, 10, 10);
     }
     
+}
+
+class RoundJTextField extends JTextField {
+    private Shape shape;
+    public RoundJTextField(int size) {
+        super(size);
+        setOpaque(false); // As suggested by @AVD in comment.
+    }
+    protected void paintComponent(Graphics g) {
+         g.setColor(getBackground());
+         g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
+         super.paintComponent(g);
+    }
+    protected void paintBorder(Graphics g) {
+         g.setColor(getForeground());
+         g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
+    }
+    public boolean contains(int x, int y) {
+         if (shape == null || !shape.getBounds().equals(getBounds())) {
+             shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 15, 15);
+         }
+         return shape.contains(x, y);
+    }
 }

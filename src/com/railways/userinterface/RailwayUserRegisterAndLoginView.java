@@ -1,15 +1,29 @@
 package com.railways.userinterface;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import com.railways.users.RailwayPassengerService;
 import com.railways.users.RailwayUserEntity;
@@ -21,21 +35,34 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	{
 		JFrame selectionScreen = createWindow("Railway Reservation - User Selection" );
 		setUserSelectionScreen(selectionScreen);
-		JButton passengerButton = createButton("Passenger");
+		JButton passengerButton = createButton("Passenger Home Screen        ");
 		setPassengerButton(passengerButton);
-		JButton adminButton = createButton("Administrator");
+		passengerButton.setSize(200, 50);
+		
+		JButton adminButton = createButton("Administrator Home Screen  ");
 		setAdminButton(adminButton);
-		JButton bookingAgentButton = createButton("Booking Agent");
+		adminButton.setSize(200, 50);
+		
+		JButton bookingAgentButton = createButton("Booking Agent Home Screen");
 		setBookingAgentButton(bookingAgentButton);
-		
-		passengerButton.setBounds(100,85,200,50);
-		adminButton.setBounds(100, 155, 200, 50);
-		bookingAgentButton.setBounds(100,225,200,50);
-		
-		addComponentsToWindow(selectionScreen, passengerButton, adminButton, bookingAgentButton);
-		
-		selectionScreen.setLayout(null);
-		selectionScreen.setVisible(true);
+		GridBagConstraints gridConstraints = new GridBagConstraints();
+	    gridConstraints.gridwidth = 1;
+		selectionScreen.setLayout(new GridBagLayout());
+	    JPanel panel = new JPanel();
+	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	    panel.setMinimumSize(new Dimension(400,200));
+	    panel.add(passengerButton);
+	    panel.add(Box.createRigidArea(new Dimension(0, 15)));
+	    panel.add(adminButton);
+	    panel.add(Box.createRigidArea(new Dimension(0, 15)));
+	    panel.add(bookingAgentButton);
+	    panel.setBorder(null);
+	    selectionScreen.add(panel, gridConstraints);
+	    selectionScreen.setSize(400, 400);
+	    selectionScreen.setLocationRelativeTo(null);
+	    selectionScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    selectionScreen.setVisible(true);
+	    selectionScreen.setLocationRelativeTo(null);
 		onClickPassengerButton();
 		onClickAdminButton();
 		onClickBookingAgentButton();
@@ -83,21 +110,36 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	public static void homeScreen()
 	{
 		JFrame railwaysHomeScreen = RailwayUserRegisterAndLoginView.createWindow("Railway Reservation Application");
-	 	setHomeScreen(railwaysHomeScreen);
-		JButton registerButton = RailwayUserRegisterAndLoginView.createButton("Register");
+		railwaysHomeScreen.setLocationRelativeTo(null);
+		setHomeScreen(railwaysHomeScreen);
+		JButton registerButton = RailwayUserRegisterAndLoginView.createButton("Click Here to Register");
 	 	setRegisterButton(registerButton);
-	 	JButton loginButton = RailwayUserRegisterAndLoginView.createButton("Login");
+	 	JButton loginButton = RailwayUserRegisterAndLoginView.createButton("Click Here to Login    ");
 	 	setLoginButton(loginButton);
+	 	GridBagConstraints gridConstraints = new GridBagConstraints();
+	    gridConstraints.gridwidth = 1;
+	    railwaysHomeScreen.setLayout(new GridBagLayout());
+	    JPanel panel = new JPanel();
+	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	    panel.setMinimumSize(new Dimension(400,200));
 	 	if(RailwayUserEntity.getRailwayUserRole()=="PASSENGER")
 	 	{
-	 		RailwayUserRegisterAndLoginView.addComponentsToWindow(railwaysHomeScreen, registerButton, loginButton);
-	 		RailwayUserRegisterAndLoginView.buttonLocation(loginButton, 150, 180);
+	 		
+		    panel.add(registerButton);
+		    panel.add(Box.createRigidArea(new Dimension(0, 15)));
+		    panel.add(loginButton);
 	 	}
 	 	else
 	 	{
-	 		RailwayUserRegisterAndLoginView.addComponentsToWindow(railwaysHomeScreen, loginButton);
-	 		RailwayUserRegisterAndLoginView.buttonLocation(loginButton, 150, 175);
+		    panel.add(loginButton);
 	 	}
+	 	panel.setBorder(null);
+	    railwaysHomeScreen.add(panel, gridConstraints);
+	    railwaysHomeScreen.setSize(getUserSelectionScreen().getWidth(), getUserSelectionScreen().getHeight());
+	    railwaysHomeScreen.setLocationRelativeTo(null);
+	    railwaysHomeScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    railwaysHomeScreen.setVisible(true);
+	    railwaysHomeScreen.setLocationRelativeTo(null);
 	 	
 	 	RailwayUserRegisterAndLoginView.buttonLocation(registerButton, 150, 120);
 	 	
@@ -127,7 +169,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		passwordTextField.setBounds(130, 180, 220, 40);
 		
 		registerButton.setBounds(150, 240, 100, 40);
-		
+		registerScreen.setLocationRelativeTo(null);
 		RailwayUserRegisterAndLoginView.addComponentsToWindow(registerScreen, emailLabel, passwordLabel, emailTextField, passwordTextField, registerButton);
 		RailwayUserRegisterAndLoginView.onClickRegisterScreenRegisterButton();
 	}
@@ -146,7 +188,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		setEmailTextField(emailTextField);
 		setPasswordTextField(passwordTextField);
 		setLoginScreenLoginButton(loginButton);
-		
+		loginScreen.setLocationRelativeTo(null);
 		emailLabel.setBounds(50, 120, 60, 40);
 		passwordLabel.setBounds(50, 180, 60, 40);
 		

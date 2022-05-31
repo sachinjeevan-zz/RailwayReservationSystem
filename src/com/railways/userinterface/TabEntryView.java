@@ -10,17 +10,17 @@ public class TabEntryView extends UserInterfaceView
 {
 	public static void tabEntryViewWindow(JButton currentButton)
 	{
-		JFrame currentWindow = createWindow(currentButton.getName(), 800, 600);
+		JFrame currentWindow = createWindow(currentButton.getName(), 815, 640);
 		JPanel toolbarPanel = createPanel(10,10,780,50);
-		toolbarPanel.setBackground(Color.GRAY);
+		//toolbarPanel.setBackground(Color.GRAY);
 		JPanel frontBackButtonPanel = createPanel(10,70,780,50);
-		frontBackButtonPanel.setBackground(Color.GRAY);
+		//frontBackButtonPanel.setBackground(Color.GRAY);
 		JPanel tablePaginationPanel = createPanel(10,130,780,50);
-		tablePaginationPanel.setBackground(Color.GRAY);
+		//tablePaginationPanel.setBackground(Color.GRAY);
 		JPanel viewTablePanel = createPanel(10,180,780,200);
-		viewTablePanel.setBackground(Color.GRAY);
+		//viewTablePanel.setBackground(Color.GRAY);
 		JPanel entryPanel = createPanel(10,390,780,200);
-		entryPanel.setBackground(Color.GRAY);
+		//entryPanel.setBackground(Color.GRAY);
 		
 		addComponentsToWindow(currentWindow, toolbarPanel, frontBackButtonPanel, tablePaginationPanel, viewTablePanel, entryPanel );
 		currentWindow.setLayout(null);

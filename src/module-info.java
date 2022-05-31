@@ -4,4 +4,5 @@ module RailwayReservationSystem {
 	requires java.xml;
 	requires java.base;
 	requires jdk.compiler;
+	requires com.formdev.flatlaf;
 }

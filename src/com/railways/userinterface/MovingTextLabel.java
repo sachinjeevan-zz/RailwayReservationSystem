@@ -11,8 +11,8 @@ public class MovingTextLabel extends UserInterfaceView implements ActionListener
 {
 	public MovingTextLabel() 
     {
-        setScrollingMessage(new JLabel("                                                                  Welcome to Railway Reservation System                                                         "));
-        getScrollingMessage().setFont(new Font("Arial", 0, 15));
+        setScrollingMessage(new JLabel("                                                                        Welcome to Ultramain Express                                                         "));
+        getScrollingMessage().setFont(new Font(getScrollingMessage().getFont().getFontName(), Font.BOLD, 18));
         getScrollingMessage().setBounds(0, 45, 780, 100); // bug
         getToolbarPanel().add(getScrollingMessage());
         Timer t = new Timer(100, this); // set a timer
