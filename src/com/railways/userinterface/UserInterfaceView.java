@@ -51,6 +51,8 @@ public class UserInterfaceView {
 	private static Map<String,Map<String,String>> navigatorWorkspaceLabels;
 	private static JLabel scrollingMessage;
 	private static final String ICON_LOCATION = "C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\icons\\";
+	private static JFrame navigatorWorkspaceFrame;
+	
 	public static JButton getRegisterButton() {
 		return homeScreenRegisterButton;
 	}
@@ -269,6 +271,14 @@ public class UserInterfaceView {
 
 	public static String getIconLocation() {
 		return ICON_LOCATION;
+	}
+
+	public static JFrame getNavigatorWorkspaceFrame() {
+		return navigatorWorkspaceFrame;
+	}
+
+	public static void setNavigatorWorkspaceFrame(JFrame navigatorWorkspaceFrame) {
+		UserInterfaceView.navigatorWorkspaceFrame = navigatorWorkspaceFrame;
 	}
 
 	static JFrame createWindow(String nameOfWindow, int width, int height)

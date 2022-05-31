@@ -16,47 +16,54 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class RailwayNavigator {
-	
+	private final static String APPLICATION_XML_LOCATION = "C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\xml\\Application.xml";
 	public static Map<String,Map<String,String>> parseNavigatorXml()
 	{
-		File navigatorXml = new File("C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\xml\\Application.xml");
-		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-		Map<String,Map<String,String>> navigatorWorkspace = new HashMap<>();
-		try {
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document docParser = dBuilder.parse(navigatorXml);
-			Node menuNode = docParser.getElementsByTagName("Menu").item(0);
-			NodeList navigatorNodes = menuNode.getChildNodes();
-			for(int indexOfItem=0;indexOfItem<navigatorNodes.getLength();indexOfItem++)
+		File applicationXml = new File(APPLICATION_XML_LOCATION);
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+		Map<String,Map<String,String>> navigatorWorkspaceDetails = new HashMap<String, Map<String,String>>();
+		try 
+		{
+			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+			Document docParser = docBuilder.parse(applicationXml);
+			NodeList rootNodeList = docParser.getElementsByTagName("Menu");
+			Node rootNode = rootNodeList.item(0);
+			NodeList navigatorNodeList = rootNode.getChildNodes();
+			Node currentNavigatorNode;
+			NodeList workspaceNodeList;
+			Map<String,String> workspaceDetails;
+			Node currentWorkspaceNode;
+			Integer indexOfNavigatorNode;
+			Integer indexOfWorkspaceNode;
+			NamedNodeMap workspaceAttributes;
+			for(indexOfNavigatorNode=0;indexOfNavigatorNode<navigatorNodeList.getLength();indexOfNavigatorNode++)
 			{
-				Node currentNode = navigatorNodes.item(indexOfItem);
-				if(currentNode.getNodeType()==Node.ELEMENT_NODE)
+				currentNavigatorNode = navigatorNodeList.item(indexOfNavigatorNode);
+				if(currentNavigatorNode.getNodeType() == Node.ELEMENT_NODE)
 				{
-					NamedNodeMap navigatorAttributes = currentNode.getAttributes();
-					NodeList workspaceRef = currentNode.getChildNodes();
-					Map<String,String> workspaceLabelNames = new HashMap<>();
-					for(int indexOfWorkspaceIndex=0;indexOfWorkspaceIndex<workspaceRef.getLength();indexOfWorkspaceIndex++)
+					workspaceNodeList = currentNavigatorNode.getChildNodes();
+					workspaceDetails = new HashMap<String, String>();
+					for(indexOfWorkspaceNode = 0; indexOfWorkspaceNode< workspaceNodeList.getLength(); indexOfWorkspaceNode++)
 					{
-						Node workspaceRefNode = workspaceRef.item(indexOfWorkspaceIndex);
-						if(workspaceRefNode.getNodeType()==Node.ELEMENT_NODE)
+						currentWorkspaceNode = workspaceNodeList.item(indexOfWorkspaceNode);
+						if(currentWorkspaceNode.getNodeType()==Node.ELEMENT_NODE)
 						{
-							NamedNodeMap workspaceAttributes = workspaceRefNode.getAttributes();
-							workspaceLabelNames.put(workspaceAttributes.getNamedItem("label").getNodeValue(),workspaceAttributes.getNamedItem("icon").getNodeValue());
+							workspaceAttributes = currentWorkspaceNode.getAttributes();
+							workspaceDetails.put(workspaceAttributes.getNamedItem("label").getNodeValue(), workspaceAttributes.getNamedItem("icon").getNodeValue());
 						}
-						
 					}
-					navigatorWorkspace.put(navigatorAttributes.getNamedItem("label").getNodeValue(), workspaceLabelNames);
+					navigatorWorkspaceDetails.put(currentNavigatorNode.getAttributes().getNamedItem("label").getNodeValue(), workspaceDetails);
 				}
+				
 			}
+			
 		} catch (ParserConfigurationException e) {
 			
 		} catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			
 		}
-		return navigatorWorkspace;
+		return navigatorWorkspaceDetails;
 	}
 }

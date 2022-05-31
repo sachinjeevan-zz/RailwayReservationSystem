@@ -2,6 +2,8 @@ package com.railways.userinterface;
 
 import java.awt.Color;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.Set;
 
@@ -14,11 +16,14 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import com.railways.navigator.RailwayNavigator;
+
 public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 	
 	public static void navigatorWorkspaceScreen()
 	{
 		JFrame navigatorWorkspaceFrame = createWindow("Train Reservation System",800,600);
+		setNavigatorWorkspaceFrame(navigatorWorkspaceFrame);
 		JPanel navigatorPanel = createPanel(5, 100, 195, 495);
 		setNavigationPanel(navigatorPanel);
 		navigatorPanel.setBackground(Color.gray);
@@ -31,6 +36,9 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 		addComponentsToWindow(navigatorWorkspaceFrame, navigatorPanel, toolbarPanel, workspacePanel);
 		getLoginScreen().setVisible(false);
 		navigatorWorkspaceFrame.setVisible(true);
+		Map<String,Map<String,String>> navigatorWorkspaceLabels = RailwayNavigator.parseNavigatorXml();
+		ApplicationNavigatorWorkspaceView.addComponentsToNavigator(navigatorWorkspaceLabels);
+		new MovingTextLabel();
 	}
 	
 	public static void addComponentsToNavigator(Map<String,Map<String,String>> navigatorWorkspaceLabels)
@@ -91,6 +99,16 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 			JButton workspaceButton = new JButton(eachWorkspaceItem,newIcon);
 			workspaceButton.setUI(new StyledButtonUI());
 			getWorkspacePanel().add(workspaceButton);
+			
+			workspaceButton.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					
+					getNavigatorWorkspaceFrame().setVisible(false);
+					TabEntryView.tabEntryViewWindow(workspaceButton);					
+				}
+			});
 		}
 	}
 	 

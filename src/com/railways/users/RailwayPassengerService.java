@@ -42,9 +42,7 @@ public class RailwayPassengerService {
 		if(ApplicationDatabaseConnect.checkLoginCredentials(passengerDetails))
 		{
 			ApplicationNavigatorWorkspaceView.navigatorWorkspaceScreen();
-			Map<String,Map<String,String>> navigatorWorkspaceLabels = RailwayNavigator.parseNavigatorXml();
-			ApplicationNavigatorWorkspaceView.addComponentsToNavigator(navigatorWorkspaceLabels);
-			new MovingTextLabel();
+			
 		}
 		else
 		{
