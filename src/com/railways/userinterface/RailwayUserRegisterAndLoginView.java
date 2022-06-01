@@ -46,7 +46,6 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		JButton bookingAgentButton = createButton("Booking Agent Home Screen");
 		setBookingAgentButton(bookingAgentButton);
 		GridBagConstraints gridConstraints = new GridBagConstraints();
-	    gridConstraints.gridwidth = 1;
 		selectionScreen.setLayout(new GridBagLayout());
 	    JPanel panel = new JPanel();
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -62,7 +61,6 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	    selectionScreen.setLocationRelativeTo(null);
 	    selectionScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    selectionScreen.setVisible(true);
-	    selectionScreen.setLocationRelativeTo(null);
 		onClickPassengerButton();
 		onClickAdminButton();
 		onClickBookingAgentButton();
@@ -179,6 +177,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		setLoginScreen(null);
 		JFrame loginScreen = RailwayUserRegisterAndLoginView.createWindow("Railway Reservation Application - Login");
 		setLoginScreen(loginScreen);
+		loginScreen.setLocationRelativeTo(null);
 		JLabel emailLabel = RailwayUserRegisterAndLoginView.createLabel("E-Mail");
 		JLabel passwordLabel = RailwayUserRegisterAndLoginView.createLabel("Password");
 		JTextField emailTextField = RailwayUserRegisterAndLoginView.createTextField("example@domain.com");

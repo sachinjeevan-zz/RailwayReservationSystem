@@ -60,6 +60,15 @@ public class UserInterfaceView {
 	private static JLabel scrollingMessage;
 	private static final String ICON_LOCATION = "C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\icons\\";
 	private static JFrame navigatorWorkspaceFrame;
+	private static JPanel viewTablePanel;
+	private static Integer viewTableLowLimit;
+	private static Integer viewTableHighLimit;
+	private static JTextField trainNumber;
+	private static JTextField trainName;
+	private static JTextField trainSourceStation;
+	private static JTextField trainDestinationStation;
+	private static JTextField trainAvailableSeats;
+	private static JTextField trainIsPantryAvailable;
 	
 	public static JButton getRegisterButton() {
 		return homeScreenRegisterButton;
@@ -287,6 +296,78 @@ public class UserInterfaceView {
 
 	public static void setNavigatorWorkspaceFrame(JFrame navigatorWorkspaceFrame) {
 		UserInterfaceView.navigatorWorkspaceFrame = navigatorWorkspaceFrame;
+	}
+
+	public static JPanel getViewTablePanel() {
+		return viewTablePanel;
+	}
+
+	public static void setViewTablePanel(JPanel viewTablePanel) {
+		UserInterfaceView.viewTablePanel = viewTablePanel;
+	}
+
+	public static Integer getViewTableLowLimit() {
+		return viewTableLowLimit;
+	}
+
+	public static void setViewTableLowLimit(Integer viewTableLowLimit) {
+		UserInterfaceView.viewTableLowLimit = viewTableLowLimit;
+	}
+
+	public static Integer getViewTableHighLimit() {
+		return viewTableHighLimit;
+	}
+
+	public static void setViewTableHighLimit(Integer viewTableHighLimit) {
+		UserInterfaceView.viewTableHighLimit = viewTableHighLimit;
+	}
+
+	public static JTextField getTrainNumber() {
+		return trainNumber;
+	}
+
+	public static void setTrainNumber(JTextField trainNumber) {
+		UserInterfaceView.trainNumber = trainNumber;
+	}
+
+	public static JTextField getTrainName() {
+		return trainName;
+	}
+
+	public static void setTrainName(JTextField trainName) {
+		UserInterfaceView.trainName = trainName;
+	}
+
+	public static JTextField getTrainSourceStation() {
+		return trainSourceStation;
+	}
+
+	public static void setTrainSourceStation(JTextField trainSourceStation) {
+		UserInterfaceView.trainSourceStation = trainSourceStation;
+	}
+
+	public static JTextField getTrainDestinationStation() {
+		return trainDestinationStation;
+	}
+
+	public static void setTrainDestinationStation(JTextField trainDestinationStation) {
+		UserInterfaceView.trainDestinationStation = trainDestinationStation;
+	}
+
+	public static JTextField getTrainAvailableSeats() {
+		return trainAvailableSeats;
+	}
+
+	public static void setTrainAvailableSeats(JTextField trainAvailableSeats) {
+		UserInterfaceView.trainAvailableSeats = trainAvailableSeats;
+	}
+
+	public static JTextField getTrainIsPantryAvailable() {
+		return trainIsPantryAvailable;
+	}
+
+	public static void setTrainIsPantryAvailable(JTextField trainIsPantryAvailable) {
+		UserInterfaceView.trainIsPantryAvailable = trainIsPantryAvailable;
 	}
 
 	static JFrame createWindow(String nameOfWindow, int width, int height)

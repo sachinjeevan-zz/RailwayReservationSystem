@@ -108,6 +108,27 @@ public class ApplicationDatabaseConnect
 		return Boolean.FALSE;
 		
 	}
+	public static void addTrainRow(String trainNumber, String trainName, String trainSourceStation, String trainDestinationStation, String trainTotalSeats, String trainSeatsAvailable, String trainIsPantryAvailable) throws SQLException
+	{
+		String queryString = "insert into railway_trains values(" + trainNumber + ",'" + trainName + "','" + trainSourceStation + "','" + trainDestinationStation + "'," + trainTotalSeats + "," + trainSeatsAvailable + "," + trainIsPantryAvailable + ");";
+		Statement statementObject = appDbConnect.createStatement();
+		statementObject.execute(queryString);
+	}
+	
+	public static ResultSet retrieveTrainDetailsRange(Integer start, Integer end)
+	{
+		String queryString = "select * from railway_trains order by train_no limit "+ start + ","+end + ";";
+		ResultSet resultData = null;
+		try {
+			Statement statementObject = appDbConnect.createStatement();
+			statementObject.execute(queryString);
+			resultData = statementObject.getResultSet();
+			
+		} catch (SQLException e) {
+			
+		}
+		return resultData;
+	}
 	
 	@Override
 	public void finalize()

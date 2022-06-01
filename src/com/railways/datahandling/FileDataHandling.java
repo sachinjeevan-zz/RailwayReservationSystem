@@ -2,9 +2,11 @@ package com.railways.datahandling;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,10 +16,10 @@ import com.railways.users.RailwayUserEntity;
 
 public class FileDataHandling {
 	
-	private static final String passengerCsvUrl =  "C:\\Users\\Sachin Jeevan\\Desktop\\RailwayReservation\\PassengerDetails.csv";
-	
+	private static final String PASSENGER_CSV_URL =  "C:\\Users\\Sachin Jeevan\\Desktop\\RailwayReservation\\PassengerDetails.csv";
+	private static final String TRAIN_CSV_URL = "C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\xml\\TrainDetails.csv";
 	public static String getPassengercsvurl() {
-		return passengerCsvUrl;
+		return PASSENGER_CSV_URL;
 	}
 
 	private static ArrayList<String> retrieveUserDataFromCsvColumn(FileReader userFileReader, Integer columnNumber)
@@ -156,5 +158,32 @@ public class FileDataHandling {
 			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getLoginScreen());
 		}
 		return Boolean.FALSE;
+	}
+	
+	public static void extractdataFromCsvAndImportToDb()
+	{
+		File newFile = new File(TRAIN_CSV_URL);
+		try {
+			FileReader newFileReader = new FileReader(newFile);
+			BufferedReader trainCsvReader = new BufferedReader(newFileReader);
+			trainCsvReader.readLine();
+			String currentLine;
+			while((currentLine = trainCsvReader.readLine())!=null)
+			{
+				String[] trainDetails = currentLine.split(",");
+				String trainNumber = trainDetails[0];
+				String trainName = trainDetails[1];
+				String trainSourceStation = trainDetails[2];
+				String trainDestinationStation = trainDetails[3];
+				String trainTotalSeats = trainDetails[4];
+				String trainSeatsAvailable = trainDetails[4];
+				String trainIsPantryAvailable = "1";
+				ApplicationDatabaseConnect.addTrainRow(trainNumber, trainName, trainSourceStation, trainDestinationStation, trainTotalSeats, trainSeatsAvailable, trainIsPantryAvailable);
+			}
+		} catch (IOException e) {
+			
+		} catch (SQLException e) {
+			
+		}
 	}
 }

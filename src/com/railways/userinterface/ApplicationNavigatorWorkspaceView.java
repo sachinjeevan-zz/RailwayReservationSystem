@@ -27,13 +27,10 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 		setNavigatorWorkspaceFrame(navigatorWorkspaceFrame);
 		JPanel navigatorPanel = createPanel(5, 55, 195, 495);
 		setNavigationPanel(navigatorPanel);
-		//navigatorPanel.setBackground(Color.gray);
 		JPanel workspacePanel = createPanel(210, 55, 570, 495);
 		setWorkspacePanel(workspacePanel);
-		//workspacePanel.setBackground(Color.gray);
 		JPanel toolbarPanel = createPanel(5, 5, 770, 30);
 		setToolbarPanel(toolbarPanel);
-		//toolbarPanel.setBackground(Color.gray);
 		addComponentsToWindow(navigatorWorkspaceFrame, navigatorPanel, toolbarPanel, workspacePanel);
 		getLoginScreen().setVisible(false);
 		navigatorWorkspaceFrame.setVisible(true);
@@ -69,7 +66,6 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 			  {
 				  DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				  if (node == null)
-					  // Nothing is selected.
 					  return;
 
 				  Object nodeInfo = node.getUserObject();
@@ -97,13 +93,12 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 			Image newImage = newIcon.getImage();
 			newImage.getScaledInstance(40, 40, Image.SCALE_SMOOTH);
 			newIcon = new ImageIcon(newImage);
-			System.out.println(newIcon.toString());
 			JButton workspaceButton = new JButton(eachWorkspaceItem,newIcon);
 			workspaceButton.setUI(new StyledButtonUI());
 			getWorkspacePanel().add(workspaceButton);
 			
-			workspaceButton.addActionListener(new ActionListener() {
-				
+			workspaceButton.addActionListener(new ActionListener() 
+			{
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
