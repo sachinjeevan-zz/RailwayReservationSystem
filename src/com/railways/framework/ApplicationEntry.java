@@ -1,7 +1,6 @@
-package com.railways.application;
+package com.railways.framework;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
-import com.railways.datahandling.FileDataHandling;
 import com.railways.userinterface.RailwayUserRegisterAndLoginView;
 
 public class ApplicationEntry 

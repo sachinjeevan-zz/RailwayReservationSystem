@@ -1,12 +1,12 @@
 package com.railways.userinterface;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -33,7 +33,6 @@ public class TabEntryView extends UserInterfaceView
 		JPanel viewTablePanel = createPanel(10,120,780,250);
 		setViewTablePanel(viewTablePanel);
 		JPanel entryPanel = createPanel(10,380,780,215);
-		
 		addComponentsToWindow(currentWindow, toolbarPanel, frontBackButtonPanel, tablePaginationPanel, viewTablePanel, entryPanel );
 		currentWindow.setLayout(null);
 		currentWindow.setVisible(true);
@@ -119,9 +118,11 @@ public class TabEntryView extends UserInterfaceView
 		getViewTablePanel().removeAll();
 		getViewTablePanel().revalidate();
 		getViewTablePanel().repaint();
-		ResultSet resultData = ApplicationDatabaseConnect.retrieveTrainDetailsRange(lowLimit, highLimit);
+		ResultSet resultData = ApplicationDatabaseConnect.getApplicationDatabaseConnectionObject().retrieveTrainDetailsRange(lowLimit, highLimit);
 		DefaultTableModel myTableModel = new DefaultTableModel()
 				{
+					private static final long serialVersionUID = 1L;
+
 					@Override 
 					public boolean isCellEditable(int row,int col)
 					{
@@ -129,18 +130,20 @@ public class TabEntryView extends UserInterfaceView
 					}
 				};
 		JTable trainTable = new JTable(myTableModel);
-		JScrollPane MyScrollPane= new JScrollPane(trainTable);
+		JScrollPane myScrollPane= new JScrollPane(trainTable);
 		myTableModel.addColumn("Train Number");
 		myTableModel.addColumn("Train Name");
 		myTableModel.addColumn("Source Station");
 		myTableModel.addColumn("Destination Station");
 		myTableModel.addColumn("Seats Available");
 		myTableModel.addColumn("Pantry Availablity");
-		MyScrollPane.setPreferredSize(new Dimension(770, 240));
-		trainTable.setFont(new Font(MyScrollPane.getFont().getFontName(),  Font.BOLD, 13));
-		trainTable.getTableHeader().setFont(new Font(MyScrollPane.getFont().getFontName(),  Font.BOLD, 15));
+		myScrollPane.setPreferredSize(new Dimension(770, 240));
+		trainTable.setFont(new Font(myScrollPane.getFont().getFontName(),  Font.BOLD, 13));
+		trainTable.getTableHeader().setFont(new Font(myScrollPane.getFont().getFontName(),  Font.BOLD, 15));
 		trainTable.setRowSelectionAllowed(true);
-		trainTable.addMouseListener(new MouseAdapter() {
+		trainTable.addMouseListener(new MouseAdapter() 
+		{
+			@Override
 			public void mouseClicked(MouseEvent me)
 			{
 				if(me.getClickCount()==2)
@@ -156,25 +159,26 @@ public class TabEntryView extends UserInterfaceView
 				}
 			}
 		});
-		try {
+		try 
+		{
 			while(resultData.next())
 			{
 				Integer trainNumber = resultData.getInt("train_no");
 				String trainName = resultData.getString("train_name");
 				String trainSourceStation = resultData.getString("train_source_station");
 				String trainDestinationStation= resultData.getString("train_destination_station");
-				Short trainTotalSeats = resultData.getShort("train_total_seats");
 				Short trainSeatsAvailable = resultData.getShort("train_available_seats");
 				Boolean trainIsPantryAvailable = resultData.getBoolean("train_is_pantry_available");
-				
 				myTableModel.addRow(new Object[] {trainNumber, trainName, trainSourceStation, trainDestinationStation, trainSeatsAvailable, trainIsPantryAvailable} );
 			}
 			
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) 
+		{
 			
 		}
 		
-		getViewTablePanel().add(MyScrollPane);
+		getViewTablePanel().add(myScrollPane);
 	}
 	
 	private static void nextPageinViewTable()
@@ -183,7 +187,6 @@ public class TabEntryView extends UserInterfaceView
 		Integer highLimit = getViewTableHighLimit();
 		Integer newLowLimit = lowLimit+highLimit;
 		setViewTableLowLimit(newLowLimit);
-		
 		renderTableInTabEntryView(newLowLimit, highLimit);
 	}
 	
@@ -193,7 +196,6 @@ public class TabEntryView extends UserInterfaceView
 		Integer highLimit = getViewTableHighLimit();
 		Integer newLowLimit = lowLimit-highLimit;
 		setViewTableLowLimit(newLowLimit);
-		
 		renderTableInTabEntryView(newLowLimit, highLimit);
 	}
 }

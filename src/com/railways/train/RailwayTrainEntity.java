@@ -5,9 +5,9 @@ public class RailwayTrainEntity
 	private Integer trainNumber;
 	private String  trainName;
 	private String  trainSourceStation;
-	private String trainDestinationStation;
-	private Short trainTotalSeats;
-	private Short trainSeatsAvailable;
+	private String 	trainDestinationStation;
+	private Short 	trainTotalSeats;
+	private Short 	trainSeatsAvailable;
 	private Boolean isPantryAvailable;
 	
 	public Integer getTrainNumber() {

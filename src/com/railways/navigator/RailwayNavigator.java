@@ -15,15 +15,23 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-public class RailwayNavigator {
-	private final static String APPLICATION_XML_LOCATION = "C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\xml\\Application.xml";
+public class RailwayNavigator 
+{
+	private static final String APPLICATION_XML_LOCATION = "C:\\Users\\Sachin Jeevan\\UltraMain\\RailwayReservationSystem\\src\\com\\railways\\xml\\Application.xml";
+	private static final String DISALLOW_DOC_TYPE = "http://apache.org/xml/features/disallow-doctype-decl";
+	private static final String EXTERNAL_GENERAL_ENTITIES = "http://xml.org/sax/features/external-general-entities";
+	private static final String EXTERNAL_PARAMETER_ENTITIES = "http://xml.org/sax/features/external-parameter-entities";
 	public static Map<String,Map<String,String>> parseNavigatorXml()
 	{
 		File applicationXml = new File(APPLICATION_XML_LOCATION);
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-		Map<String,Map<String,String>> navigatorWorkspaceDetails = new HashMap<String, Map<String,String>>();
+		
+		Map<String,Map<String,String>> navigatorWorkspaceDetails = new HashMap<>();
 		try 
 		{
+			docBuilderFactory.setFeature(DISALLOW_DOC_TYPE,true);
+			docBuilderFactory.setFeature(EXTERNAL_GENERAL_ENTITIES,false);
+			docBuilderFactory.setFeature(EXTERNAL_PARAMETER_ENTITIES,false);
 			DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 			Document docParser = docBuilder.parse(applicationXml);
 			NodeList rootNodeList = docParser.getElementsByTagName("Menu");
@@ -42,7 +50,7 @@ public class RailwayNavigator {
 				if(currentNavigatorNode.getNodeType() == Node.ELEMENT_NODE)
 				{
 					workspaceNodeList = currentNavigatorNode.getChildNodes();
-					workspaceDetails = new HashMap<String, String>();
+					workspaceDetails = new HashMap<>();
 					for(indexOfWorkspaceNode = 0; indexOfWorkspaceNode< workspaceNodeList.getLength(); indexOfWorkspaceNode++)
 					{
 						currentWorkspaceNode = workspaceNodeList.item(indexOfWorkspaceNode);
@@ -57,11 +65,9 @@ public class RailwayNavigator {
 				
 			}
 			
-		} catch (ParserConfigurationException e) {
-			
-		} catch (SAXException e) {
-			
-		} catch (IOException e) {
+		} 
+		catch (ParserConfigurationException | SAXException | IOException e) 
+		{
 			
 		}
 		return navigatorWorkspaceDetails;

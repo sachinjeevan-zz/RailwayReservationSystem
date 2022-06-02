@@ -12,16 +12,16 @@ import com.railways.users.RailwayUserEntity;
 
 public class ApplicationDatabaseConnect 
 {
-	private final String DATABASE_URL = "jdbc:mariadb://localhost:3306/railways";
-	private final String DATABASE_USERNAME = "root";
-	private final String DATABASE_PASSWORD = "iLearn@2021";
-	private static Connection appDbConnect;
+	private static final String DATABASE_URL = "jdbc:mariadb://localhost:3306/railways";
+	private static final String DATABASE_USERNAME = "root";
+	private static final String DATABASE_PASSWORD = "iLearn@2021";
+	private Connection appDbConnect;
 	private static ApplicationDatabaseConnect applicationDatabaseConnectionObject = getAppDbConnectionObject();
 	private ApplicationDatabaseConnect()
 	{
 		try
 		{
-			appDbConnect = DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD);
+			setAppDbConnect(DriverManager.getConnection(DATABASE_URL, DATABASE_USERNAME, DATABASE_PASSWORD));
 		}
 		catch( SQLException e)
 		{
@@ -29,6 +29,24 @@ public class ApplicationDatabaseConnect
 		}
 	}
 	
+	public Connection getAppDbConnect() {
+		return appDbConnect;
+	}
+
+	public void setAppDbConnect(Connection appDbConnect) {
+		this.appDbConnect = appDbConnect;
+	}
+
+	
+	public static ApplicationDatabaseConnect getApplicationDatabaseConnectionObject() {
+		return applicationDatabaseConnectionObject;
+	}
+
+	public static void setApplicationDatabaseConnectionObject(
+			ApplicationDatabaseConnect applicationDatabaseConnectionObject) {
+		ApplicationDatabaseConnect.applicationDatabaseConnectionObject = applicationDatabaseConnectionObject;
+	}
+
 	public static ApplicationDatabaseConnect getAppDbConnectionObject()
 	{
 		
@@ -39,7 +57,7 @@ public class ApplicationDatabaseConnect
 		return applicationDatabaseConnectionObject;
 	}
 	
-	public static void createPassengerTable() throws SQLException
+	public void createPassengerTable()
 	{
 		String createPassengerTableQuery = "CREATE TABLE railway_passengers("
 				+ "passenger_id varchar(30),"
@@ -50,94 +68,104 @@ public class ApplicationDatabaseConnect
 				+ "passenger_age int,"
 				+ "passenger_mobile_number bigint"
 				+ ");";
-		Statement sqlStatement = appDbConnect.createStatement();
-		sqlStatement.execute(createPassengerTableQuery);
+		try(Statement sqlStatement = getAppDbConnect().createStatement()) 
+		{
+			sqlStatement.execute(createPassengerTableQuery);
+		} 
+		catch (SQLException e) 
+		{
+
+		}
 	}
 	
-	public static List<String> extractMailIdsFromPassengerTable()
+	public List<String> extractMailIdsFromPassengerTable()
 	{
 		String queryString = "select passenger_mail_id from railway_passengers;";
-		Statement statementObject;
 		List<String> passengerCredentials = new ArrayList<>();
-		try {
-			statementObject = appDbConnect.createStatement();
+		try(Statement statementObject = getAppDbConnect().createStatement()) 
+		{
 			statementObject.execute(queryString);
 			ResultSet resultSet = statementObject.getResultSet();
 			while(resultSet.next())
 			{
 				passengerCredentials.add(resultSet.getString("passenger_mail_id"));
 			}
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) 
+		{
 			
 		}
 		return passengerCredentials;
 	}
 	
-	public static void createPassengerAccount(RailwayUserEntity railwayPassenger)
+	public void createPassengerAccount(RailwayUserEntity railwayPassenger)
 	{
 		String mailId = railwayPassenger.getRailwayUserMailId();
 		String password = railwayPassenger.getRailwayUserPassword();
 		String queryString = "insert into railway_passengers(passenger_mail_id,passenger_password) values('"
 				+ mailId + "','"+ password+"');";
-		try {
-			Statement statementObject = appDbConnect.createStatement();
+		try(Statement statementObject = getAppDbConnect().createStatement()) 
+		{
 			statementObject.execute(queryString);
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) 
+		{
 			
 		}
 		
 	}
 	
-	public static Boolean checkLoginCredentials(RailwayUserEntity railwayPassenger)
+	public Boolean checkLoginCredentials(RailwayUserEntity railwayPassenger)
 	{
 		String passengerMailId = railwayPassenger.getRailwayUserMailId();
 		String passengerPassword = railwayPassenger.getRailwayUserPassword();
-		
 		String queryString = "select * from railway_passengers where passenger_mail_id='"
 				+ passengerMailId + "' AND passenger_password='"
-						+ passengerPassword+ "';";
-		
-		try {
-			Statement statementObject = appDbConnect.createStatement();
+				+ passengerPassword+ "';";
+		try(Statement statementObject = getAppDbConnect().createStatement()) 
+		{
 			statementObject.execute(queryString);
 			return statementObject.getResultSet().first();
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) 
+		{
 			
 		}
-		
-		return Boolean.FALSE;
-		
-	}
-	public static void addTrainRow(String trainNumber, String trainName, String trainSourceStation, String trainDestinationStation, String trainTotalSeats, String trainSeatsAvailable, String trainIsPantryAvailable) throws SQLException
-	{
-		String queryString = "insert into railway_trains values(" + trainNumber + ",'" + trainName + "','" + trainSourceStation + "','" + trainDestinationStation + "'," + trainTotalSeats + "," + trainSeatsAvailable + "," + trainIsPantryAvailable + ");";
-		Statement statementObject = appDbConnect.createStatement();
-		statementObject.execute(queryString);
+		return Boolean.FALSE;	
 	}
 	
-	public static ResultSet retrieveTrainDetailsRange(Integer start, Integer end)
+	public void addTrainRow(String trainNumber, String trainName, String trainSourceStation, String trainDestinationStation, String trainTotalSeats, String trainSeatsAvailable, String trainIsPantryAvailable)
 	{
-		String queryString = "select * from railway_trains order by train_no limit "+ start + ","+end + ";";
+		String queryString = "insert into railway_trains values("
+				+ trainNumber + ",'" + trainName + "','" 
+				+ trainSourceStation + "','" + trainDestinationStation 
+				+ "'," + trainTotalSeats + "," + trainSeatsAvailable + "," 
+				+ trainIsPantryAvailable + ");";
+		try(Statement statementObject = getAppDbConnect().createStatement())
+		{
+			statementObject.execute(queryString);
+		} 
+		catch (SQLException e) 
+		{
+
+		}
+	}
+	
+	public ResultSet retrieveTrainDetailsRange(Integer start, Integer end)
+	{
+		String queryString = "select * from railway_trains order by train_no limit "
+							 + start + ","+ end + ";";
 		ResultSet resultData = null;
-		try {
-			Statement statementObject = appDbConnect.createStatement();
+		try(Statement statementObject = getAppDbConnect().createStatement()) 
+		{
 			statementObject.execute(queryString);
 			resultData = statementObject.getResultSet();
-			
-		} catch (SQLException e) {
+		} 
+		catch (SQLException e) 
+		{
 			
 		}
 		return resultData;
-	}
-	
-	@Override
-	public void finalize()
-	{
-		try {
-			appDbConnect.close();
-		} catch (SQLException e) {
-			
-		}
 	}
 
 }

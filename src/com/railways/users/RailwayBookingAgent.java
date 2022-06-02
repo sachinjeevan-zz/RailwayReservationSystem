@@ -1,5 +1,6 @@
 package com.railways.users;
 
-public class RailwayBookingAgent {
+public class RailwayBookingAgent 
+{
 
 }

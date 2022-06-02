@@ -1,10 +1,10 @@
 package com.railways.userinterface;
 
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.Map;
 import java.util.Set;
 
@@ -60,14 +60,12 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 	{
 		  TreeSelectionListener objTreeListener = new TreeSelectionListener() 
 		  {
-			  @SuppressWarnings("unused")
 			  @Override
 			  public void valueChanged(TreeSelectionEvent e) 
 			  {
 				  DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
 				  if (node == null)
 					  return;
-
 				  Object nodeInfo = node.getUserObject();
 				  String nodeLabelName;
 				  if (node.isLeaf()) 
@@ -108,6 +106,5 @@ public class ApplicationNavigatorWorkspaceView extends UserInterfaceView {
 			});
 		}
 	}
-	 
 	 
 }

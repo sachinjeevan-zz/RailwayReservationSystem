@@ -1,18 +1,12 @@
 package com.railways.userinterface;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -22,8 +16,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.LineBorder;
+import javax.swing.WindowConstants;
 
 import com.railways.users.RailwayPassengerService;
 import com.railways.users.RailwayUserEntity;
@@ -35,6 +28,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	{
 		JFrame selectionScreen = createWindow("Railway Reservation - User Selection" );
 		setUserSelectionScreen(selectionScreen);
+		
 		JButton passengerButton = createButton("Passenger Home Screen        ");
 		setPassengerButton(passengerButton);
 		passengerButton.setSize(200, 50);
@@ -47,6 +41,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		setBookingAgentButton(bookingAgentButton);
 		GridBagConstraints gridConstraints = new GridBagConstraints();
 		selectionScreen.setLayout(new GridBagLayout());
+		
 	    JPanel panel = new JPanel();
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	    panel.setMinimumSize(new Dimension(400,200));
@@ -56,11 +51,13 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	    panel.add(Box.createRigidArea(new Dimension(0, 15)));
 	    panel.add(bookingAgentButton);
 	    panel.setBorder(null);
+	    
 	    selectionScreen.add(panel, gridConstraints);
 	    selectionScreen.setSize(400, 400);
 	    selectionScreen.setLocationRelativeTo(null);
-	    selectionScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    selectionScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    selectionScreen.setVisible(true);
+	    
 		onClickPassengerButton();
 		onClickAdminButton();
 		onClickBookingAgentButton();
@@ -71,10 +68,10 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		getPassengerButton().addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				RailwayUserEntity.setRailwayUserRole("PASSENGER");
+			public void actionPerformed(ActionEvent e) 
+			{
 				getUserSelectionScreen().setVisible(false);
-				homeScreen();
+				homeScreen("PASSENGER");
 			}
 		});
 	}
@@ -84,10 +81,10 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		getAdminButton().addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				RailwayUserEntity.setRailwayUserRole("ADMIN");
+			public void actionPerformed(ActionEvent e) 
+			{
 				getUserSelectionScreen().setVisible(false);
-				homeScreen();
+				homeScreen("ADMIN");
 			}
 		});
 	}
@@ -97,30 +94,29 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 		getBookingAgentButton().addActionListener(new ActionListener() {
 			
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				RailwayUserEntity.setRailwayUserRole("BOOKING_AGENT");
+			public void actionPerformed(ActionEvent e) 
+			{
 				getUserSelectionScreen().setVisible(false);
-				homeScreen();
+				homeScreen("BOOKING_AGENT");
 			}
 		});
 	}
 	
-	public static void homeScreen()
+	public static void homeScreen(String userRole)
 	{
-		JFrame railwaysHomeScreen = RailwayUserRegisterAndLoginView.createWindow("Railway Reservation Application");
+		JFrame railwaysHomeScreen = createWindow("Railway Reservation Application");
 		railwaysHomeScreen.setLocationRelativeTo(null);
 		setHomeScreen(railwaysHomeScreen);
-		JButton registerButton = RailwayUserRegisterAndLoginView.createButton("Click Here to Register");
+		JButton registerButton = createButton("Click Here to Register");
 	 	setRegisterButton(registerButton);
-	 	JButton loginButton = RailwayUserRegisterAndLoginView.createButton("Click Here to Login    ");
+	 	JButton loginButton = createButton("Click Here to Login    ");
 	 	setLoginButton(loginButton);
 	 	GridBagConstraints gridConstraints = new GridBagConstraints();
-	    gridConstraints.gridwidth = 1;
 	    railwaysHomeScreen.setLayout(new GridBagLayout());
 	    JPanel panel = new JPanel();
 	    panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 	    panel.setMinimumSize(new Dimension(400,200));
-	 	if(RailwayUserEntity.getRailwayUserRole()=="PASSENGER")
+	 	if("PASSENGER".equals(userRole))
 	 	{
 	 		
 		    panel.add(registerButton);
@@ -135,69 +131,110 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	    railwaysHomeScreen.add(panel, gridConstraints);
 	    railwaysHomeScreen.setSize(getUserSelectionScreen().getWidth(), getUserSelectionScreen().getHeight());
 	    railwaysHomeScreen.setLocationRelativeTo(null);
-	    railwaysHomeScreen.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	    railwaysHomeScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	    railwaysHomeScreen.setVisible(true);
-	    railwaysHomeScreen.setLocationRelativeTo(null);
+	 	buttonLocation(registerButton, 150, 120);
 	 	
-	 	RailwayUserRegisterAndLoginView.buttonLocation(registerButton, 150, 120);
-	 	
-	 	RailwayUserRegisterAndLoginView.onClickHomeScreenRegisterButton();
-	 	RailwayUserRegisterAndLoginView.onClickHomeScreenLoginButton();
+	 	onClickHomeScreenRegisterButton();
+	 	onClickHomeScreenLoginButton();
 	}
 	
 	public static void registerScreen()
 	{
-		setRegisterScreen(null);
-		JFrame registerScreen = RailwayUserRegisterAndLoginView.createWindow("Railway Reservation Application - register");
+		JFrame registerScreen = createWindow("Railway Reservation Application - Register");
 		setRegisterScreen(registerScreen);
-		JLabel emailLabel = RailwayUserRegisterAndLoginView.createLabel("E-Mail");
-		JLabel passwordLabel = RailwayUserRegisterAndLoginView.createLabel("Password");
-		JTextField emailTextField = RailwayUserRegisterAndLoginView.createTextField("example@domain.com");
-		JPasswordField passwordTextField = new JPasswordField("********");
-		JButton registerButton = RailwayUserRegisterAndLoginView.createButton("Register");
+		registerScreen.setLocationRelativeTo(null);
+		JLabel emailLabel = createLabel("E-Mail      ");
+		JLabel passwordLabel = createLabel("Password");
+		JTextField emailTextField = createTextField("example@domain.com");
 
+		JPasswordField passwordTextField = new JPasswordField("********");
+		JButton registerButton = createButton("Register");
+		JPanel registerScreenEmailPanel = new JPanel();
+		registerScreenEmailPanel.setLayout(new BoxLayout(registerScreenEmailPanel, BoxLayout.X_AXIS));
+		registerScreenEmailPanel.setMinimumSize(new Dimension(300,40));
+		
+		JPanel registerScreenPasswordPanel = new JPanel();
+		registerScreenPasswordPanel.setLayout(new BoxLayout(registerScreenPasswordPanel, BoxLayout.X_AXIS));
+		registerScreenPasswordPanel.setMinimumSize(new Dimension(300,40));
+		
+		JPanel registerScreenOkButtonPanel = new JPanel();
+		registerScreenOkButtonPanel.setLayout(new BoxLayout(registerScreenOkButtonPanel, BoxLayout.X_AXIS));
+		registerScreenOkButtonPanel.setMinimumSize(new Dimension(300,40));
+		
 		setEmailTextField(emailTextField);
 		setPasswordTextField(passwordTextField);
 		setRegisterScreenRegisterButton(registerButton);
-		
-		emailLabel.setBounds(50, 120, 60, 40);
-		passwordLabel.setBounds(50, 180, 60, 40);
-		
-		emailTextField.setBounds(130, 120, 220, 40);
-		passwordTextField.setBounds(130, 180, 220, 40);
-		
-		registerButton.setBounds(150, 240, 100, 40);
-		registerScreen.setLocationRelativeTo(null);
-		RailwayUserRegisterAndLoginView.addComponentsToWindow(registerScreen, emailLabel, passwordLabel, emailTextField, passwordTextField, registerButton);
-		RailwayUserRegisterAndLoginView.onClickRegisterScreenRegisterButton();
+		registerScreenEmailPanel.add(emailLabel);
+		registerScreenEmailPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		registerScreenEmailPanel.add(emailTextField);
+		registerScreenPasswordPanel.add(passwordLabel);
+		registerScreenPasswordPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		registerScreenPasswordPanel.add(passwordTextField);
+		registerScreenOkButtonPanel.add(registerButton);
+		GridBagConstraints gridConstraints = new GridBagConstraints();
+		JPanel registerScreenPanel = new JPanel();
+		registerScreenPanel.setLayout(new BoxLayout(registerScreenPanel, BoxLayout.Y_AXIS));
+		registerScreenPanel.add(registerScreenEmailPanel);
+		registerScreenPanel.add(Box.createRigidArea(new Dimension(0,20)));
+		registerScreenPanel.add(registerScreenPasswordPanel);
+		registerScreenPanel.add(Box.createRigidArea(new Dimension(0,20)));
+		registerScreenPanel.add(registerScreenOkButtonPanel);
+		registerScreenOkButtonPanel.setMinimumSize(new Dimension(400,200));
+		registerScreen.add(registerScreenPanel,gridConstraints);
+		registerScreen.setLayout(new GridBagLayout());
+		registerScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		registerScreen.setVisible(true);
+		onClickRegisterScreenRegisterButton();
 	}
 	
 	public static void loginScreen()
 	{
-		setLoginScreen(null);
-		JFrame loginScreen = RailwayUserRegisterAndLoginView.createWindow("Railway Reservation Application - Login");
+		JFrame loginScreen = createWindow("Railway Reservation Application - Login");
 		setLoginScreen(loginScreen);
 		loginScreen.setLocationRelativeTo(null);
-		JLabel emailLabel = RailwayUserRegisterAndLoginView.createLabel("E-Mail");
-		JLabel passwordLabel = RailwayUserRegisterAndLoginView.createLabel("Password");
-		JTextField emailTextField = RailwayUserRegisterAndLoginView.createTextField("example@domain.com");
-		JPasswordField passwordTextField = new JPasswordField("********");
-		JButton loginButton = RailwayUserRegisterAndLoginView.createButton("Login");
+		JLabel emailLabel = createLabel("E-Mail      ");
+		JLabel passwordLabel = createLabel("Password");
+		JTextField emailTextField = createTextField("example@domain.com");
 
+		JPasswordField passwordTextField = new JPasswordField("********");
+		JButton loginButton = createButton("Login");
+		JPanel loginScreenEmailPanel = new JPanel();
+		loginScreenEmailPanel.setLayout(new BoxLayout(loginScreenEmailPanel, BoxLayout.X_AXIS));
+		loginScreenEmailPanel.setMinimumSize(new Dimension(300,40));
+		
+		JPanel loginScreenPasswordPanel = new JPanel();
+		loginScreenPasswordPanel.setLayout(new BoxLayout(loginScreenPasswordPanel, BoxLayout.X_AXIS));
+		loginScreenPasswordPanel.setMinimumSize(new Dimension(300,40));
+		
+		JPanel loginScreenOkButtonPanel = new JPanel();
+		loginScreenOkButtonPanel.setLayout(new BoxLayout(loginScreenOkButtonPanel, BoxLayout.X_AXIS));
+		loginScreenOkButtonPanel.setMinimumSize(new Dimension(300,40));
+		
 		setEmailTextField(emailTextField);
 		setPasswordTextField(passwordTextField);
 		setLoginScreenLoginButton(loginButton);
-		loginScreen.setLocationRelativeTo(null);
-		emailLabel.setBounds(50, 120, 60, 40);
-		passwordLabel.setBounds(50, 180, 60, 40);
-		
-		emailTextField.setBounds(130, 120, 220, 40);
-		passwordTextField.setBounds(130, 180, 220, 40);
-		
-		loginButton.setBounds(150, 240, 100, 40);
-		
-		RailwayUserRegisterAndLoginView.addComponentsToWindow(loginScreen, emailLabel, passwordLabel, emailTextField, passwordTextField, loginButton);
-		RailwayUserRegisterAndLoginView.onClickLoginScreenLoginButton();
+		loginScreenEmailPanel.add(emailLabel);
+		loginScreenEmailPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		loginScreenEmailPanel.add(emailTextField);
+		loginScreenPasswordPanel.add(passwordLabel);
+		loginScreenPasswordPanel.add(Box.createRigidArea(new Dimension(20,0)));
+		loginScreenPasswordPanel.add(passwordTextField);
+		loginScreenOkButtonPanel.add(loginButton);
+		GridBagConstraints gridConstraints = new GridBagConstraints();
+		JPanel loginScreenPanel = new JPanel();
+		loginScreenPanel.setLayout(new BoxLayout(loginScreenPanel, BoxLayout.Y_AXIS));
+		loginScreenPanel.add(loginScreenEmailPanel);
+		loginScreenPanel.add(Box.createRigidArea(new Dimension(0,20)));
+		loginScreenPanel.add(loginScreenPasswordPanel);
+		loginScreenPanel.add(Box.createRigidArea(new Dimension(0,20)));
+		loginScreenPanel.add(loginScreenOkButtonPanel);
+		loginScreenPanel.setMinimumSize(new Dimension(400,200));
+		loginScreen.add(loginScreenPanel,gridConstraints);
+		loginScreen.setLayout(new GridBagLayout());
+		loginScreen.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		loginScreen.setVisible(true);
+		onClickLoginScreenLoginButton();
 	}
 	
 	public static void onClickHomeScreenRegisterButton()
@@ -208,7 +245,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 			public void actionPerformed(ActionEvent e)
 			{
 				getHomeScreen().setVisible(false);
-				RailwayUserRegisterAndLoginView.registerScreen();
+				registerScreen();
 			}
 		});
 	}
@@ -221,7 +258,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 			public void actionPerformed(ActionEvent e)
 			{
 				getHomeScreen().setVisible(false);
-				RailwayUserRegisterAndLoginView.loginScreen();
+				loginScreen();
 			}
 		});
 	}
@@ -277,28 +314,29 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	
 	public static void userAlreadyExistDialogBox()
 	{
-		JDialog userExistDialogBox = new JDialog(RailwayUserRegisterAndLoginView.getRegisterScreen(),"Email already exist",true);
-		RailwayUserRegisterAndLoginView.setUserEmailAlreadyExistDialogBox(userExistDialogBox);
+		JDialog userExistDialogBox = new JDialog(getRegisterScreen(),"Email already exist",true);
+		userExistDialogBox.setLocationRelativeTo(null);
+		setUserEmailAlreadyExistDialogBox(userExistDialogBox);
 		userExistDialogBox.setLayout(new FlowLayout());
-		JButton dialogOkButton = RailwayUserRegisterAndLoginView.createButton("OK");
-		RailwayUserRegisterAndLoginView.setUserEmailAlreadyExistOkButton(dialogOkButton);
-		JLabel mailAlreadyExistLabel = new JLabel("Email Already Exist");
+		JButton dialogOkButton = createButton("OK");
+		setUserEmailAlreadyExistOkButton(dialogOkButton);
+		JLabel mailAlreadyExistLabel = new JLabel("Account with the entered e-mail already exist");
 		userExistDialogBox.add(mailAlreadyExistLabel);
 		userExistDialogBox.add(dialogOkButton);
-		userExistDialogBox.setSize(150, 100);
-		RailwayUserRegisterAndLoginView.onClickRegisterScreenDialogBoxOkButton();
+		userExistDialogBox.setSize(new Dimension(275, 100));
+		onClickRegisterScreenDialogBoxOkButton();
 		userExistDialogBox.setVisible(true);
 	}
 	
 	public static void userAccountSuccessfullyRegisteredDialogBox()
 	{
-		JDialog userCreatedDialogBox = new JDialog(RailwayUserRegisterAndLoginView.getRegisterScreen(),"Email already exist",true);
-		RailwayUserRegisterAndLoginView.setUserCreatedDialogBox(userCreatedDialogBox);
+		JDialog userCreatedDialogBox = new JDialog(getRegisterScreen(),"Email already exist",true);
+		setUserCreatedDialogBox(userCreatedDialogBox);
 		userCreatedDialogBox.setLayout(new FlowLayout());
-		JButton dialogLoginButton = RailwayUserRegisterAndLoginView.createButton("Login Page");
-		JButton dialogHomeButton = RailwayUserRegisterAndLoginView.createButton("Home Page");
-		RailwayUserRegisterAndLoginView.setUserRegisteredLoginButton(dialogLoginButton);
-		RailwayUserRegisterAndLoginView.setUserRegisteredHomeButton(dialogHomeButton);
+		JButton dialogLoginButton = createButton("Login Page");
+		JButton dialogHomeButton = createButton("Home Page");
+		setUserRegisteredLoginButton(dialogLoginButton);
+		setUserRegisteredHomeButton(dialogHomeButton);
 		JLabel userAccountSuccessfullyCreatedLabel = new JLabel("Account is successfully registered");
 		userCreatedDialogBox.add(userAccountSuccessfullyCreatedLabel);
 		userCreatedDialogBox.add(dialogLoginButton);
@@ -342,7 +380,7 @@ public class RailwayUserRegisterAndLoginView extends UserInterfaceView
 	public static void invalidEmailDialogBox()
 	{
 		JDialog railwayInvalidEmailDialogBox = new JDialog(getLoginScreen(),"Invalid Email or Password",true);
-		RailwayUserRegisterAndLoginView.setInvalidEmailDialogWindow(railwayInvalidEmailDialogBox);
+		setInvalidEmailDialogWindow(railwayInvalidEmailDialogBox);
 		railwayInvalidEmailDialogBox.setLayout(new FlowLayout());
 		JButton dialogOkButton = createButton("OK");
 		JLabel userAccountSuccessfullyCreatedLabel = new JLabel("Invalid Email or Password");

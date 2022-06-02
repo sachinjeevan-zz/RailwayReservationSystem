@@ -2,16 +2,14 @@ package com.railways.datahandling;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.railways.userinterface.RailwayUserRegisterAndLoginView;
+import com.railways.userinterface.UserInterfaceView;
 import com.railways.users.RailwayUserEntity;
 
 public class FileDataHandling {
@@ -44,7 +42,7 @@ public class FileDataHandling {
 				try {
 					userBufferedReader.close();
 				} catch (IOException e) {
-					RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getLoginScreen());
+					UserInterfaceView.contactAdminDialogBox(UserInterfaceView.getLoginScreen());
 				}
 			}
 			return userColumnData;
@@ -98,7 +96,7 @@ public class FileDataHandling {
 			userFileWriter.flush();
 		} 
 		catch (IOException e) {
-			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getRegisterScreen());
+			UserInterfaceView.contactAdminDialogBox(UserInterfaceView.getRegisterScreen());
 		}
 	}
 	
@@ -120,7 +118,7 @@ public class FileDataHandling {
 		}
 		catch(IOException e)
 		{
-			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getRegisterScreen());
+			UserInterfaceView.contactAdminDialogBox(UserInterfaceView.getRegisterScreen());
 		}
 	}
 	
@@ -135,7 +133,7 @@ public class FileDataHandling {
 		}
 		catch(IOException f)
 		{
-			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getRegisterScreen());
+			UserInterfaceView.contactAdminDialogBox(UserInterfaceView.getRegisterScreen());
 		}
 		return userMailIds;
 	}
@@ -155,7 +153,7 @@ public class FileDataHandling {
 		} 
 		catch (IOException e) 
 		{
-			RailwayUserRegisterAndLoginView.contactAdminDialogBox(RailwayUserRegisterAndLoginView.getLoginScreen());
+			UserInterfaceView.contactAdminDialogBox(UserInterfaceView.getLoginScreen());
 		}
 		return Boolean.FALSE;
 	}
@@ -163,9 +161,8 @@ public class FileDataHandling {
 	public static void extractdataFromCsvAndImportToDb()
 	{
 		File newFile = new File(TRAIN_CSV_URL);
-		try {
-			FileReader newFileReader = new FileReader(newFile);
-			BufferedReader trainCsvReader = new BufferedReader(newFileReader);
+		try(FileReader newFileReader = new FileReader(newFile);BufferedReader trainCsvReader = new BufferedReader(newFileReader)) 
+		{
 			trainCsvReader.readLine();
 			String currentLine;
 			while((currentLine = trainCsvReader.readLine())!=null)
@@ -178,11 +175,11 @@ public class FileDataHandling {
 				String trainTotalSeats = trainDetails[4];
 				String trainSeatsAvailable = trainDetails[4];
 				String trainIsPantryAvailable = "1";
-				ApplicationDatabaseConnect.addTrainRow(trainNumber, trainName, trainSourceStation, trainDestinationStation, trainTotalSeats, trainSeatsAvailable, trainIsPantryAvailable);
+				ApplicationDatabaseConnect.getApplicationDatabaseConnectionObject().addTrainRow(trainNumber, trainName, trainSourceStation, trainDestinationStation, trainTotalSeats, trainSeatsAvailable, trainIsPantryAvailable);
 			}
-		} catch (IOException e) {
-			
-		} catch (SQLException e) {
+		} 
+		catch (IOException e) 
+		{
 			
 		}
 	}

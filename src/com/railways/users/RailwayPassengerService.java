@@ -1,16 +1,13 @@
 package com.railways.users;
 
-import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 import com.railways.datahandling.ApplicationDatabaseConnect;
-import com.railways.navigator.RailwayNavigator;
 import com.railways.userinterface.ApplicationNavigatorWorkspaceView;
-import com.railways.userinterface.MovingTextLabel;
 import com.railways.userinterface.RailwayUserRegisterAndLoginView;
 
-public class RailwayPassengerService {
+public class RailwayPassengerService 
+{
 	private RailwayUserEntity  passengerDetails;
 
 	public RailwayUserEntity getPassengerDetails() {
@@ -23,12 +20,11 @@ public class RailwayPassengerService {
 	
 	public void passengerAccountCreation()
 	{
-		List<String> passengerMailIds =  ApplicationDatabaseConnect.extractMailIdsFromPassengerTable();
+		List<String> passengerMailIds =  ApplicationDatabaseConnect.getApplicationDatabaseConnectionObject().extractMailIdsFromPassengerTable();
 		String mailId = passengerDetails.getRailwayUserMailId();
-		
 		if(!passengerMailIds.contains(mailId))
 		{
-			ApplicationDatabaseConnect.createPassengerAccount(passengerDetails);
+			ApplicationDatabaseConnect.getApplicationDatabaseConnectionObject().createPassengerAccount(passengerDetails);
 			RailwayUserRegisterAndLoginView.userAccountSuccessfullyRegisteredDialogBox();
 		}
 		else
@@ -39,10 +35,9 @@ public class RailwayPassengerService {
 	
 	public void passengerLoginAccess()
 	{
-		if(ApplicationDatabaseConnect.checkLoginCredentials(passengerDetails))
+		if(Boolean.TRUE.equals(ApplicationDatabaseConnect.getApplicationDatabaseConnectionObject().checkLoginCredentials(passengerDetails)))
 		{
 			ApplicationNavigatorWorkspaceView.navigatorWorkspaceScreen();
-			
 		}
 		else
 		{
@@ -50,13 +45,4 @@ public class RailwayPassengerService {
 		}
 	}
 	
-	public static void createPassengerTableSchema()
-	{
-		try {
-			ApplicationDatabaseConnect.createPassengerTable();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 }

@@ -1,6 +1,5 @@
 package com.railways.userinterface;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -10,9 +9,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Shape;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
+import java.io.Serializable;
 import java.util.Map;
 
 import javax.swing.AbstractButton;
@@ -26,7 +27,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicButtonUI;
@@ -434,9 +434,9 @@ public class UserInterfaceView {
 	public static void contactAdminDialogBox(JFrame currentScreen)
 	{
 		JDialog railwayContactAdminDialogBox = new JDialog(currentScreen,"Contact Administrator",true);
-		RailwayUserRegisterAndLoginView.setContactAdminDialogBox(railwayContactAdminDialogBox);
+		setContactAdminDialogBox(railwayContactAdminDialogBox);
 		railwayContactAdminDialogBox.setLayout(new FlowLayout());
-		JButton dialogOkButton = RailwayUserRegisterAndLoginView.createButton("OK");
+		JButton dialogOkButton = createButton("OK");
 		JLabel userAccountSuccessfullyCreatedLabel = new JLabel("Please contact administration");
 		railwayContactAdminDialogBox.add(userAccountSuccessfullyCreatedLabel);
 		railwayContactAdminDialogBox.add(dialogOkButton);
@@ -495,25 +495,62 @@ class StyledButtonUI extends BasicButtonUI {
     
 }
 
-class RoundJTextField extends JTextField {
-    private Shape shape;
-    public RoundJTextField(int size) {
+class RoundJTextField extends JTextField implements Serializable
+{
+	private static final long serialVersionUID = 1L;
+	private transient Shape shape;
+	
+    public RoundJTextField(int size) 
+    {
         super(size);
-        setOpaque(false); // As suggested by @AVD in comment.
+        setOpaque(false);
     }
-    protected void paintComponent(Graphics g) {
+    
+    @Override
+    protected void paintComponent(Graphics g) 
+    {
          g.setColor(getBackground());
          g.fillRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
          super.paintComponent(g);
     }
-    protected void paintBorder(Graphics g) {
+    
+    @Override
+    protected void paintBorder(Graphics g) 
+    {
          g.setColor(getForeground());
          g.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, 15, 15);
     }
-    public boolean contains(int x, int y) {
+    
+    @Override
+    public boolean contains(int x, int y) 
+    {
          if (shape == null || !shape.getBounds().equals(getBounds())) {
-             shape = new RoundRectangle2D.Float(0, 0, getWidth()-1, getHeight()-1, 15, 15);
+             shape = new RoundRectangle2D.Float(0, 0, (float)getWidth()-1, (float)getHeight()-1, 15, 15);
          }
          return shape.contains(x, y);
     }
 }
+class CenterDialogBox extends JDialog  
+{  
+	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void setSize(int width, int height)  
+	{  
+	  super.setSize(width, height);  
+	   
+	  Toolkit toolkit = Toolkit.getDefaultToolkit();  
+	  Dimension screenSize = toolkit.getScreenSize();  
+	  
+	  int x = (screenSize.width - getWidth()) / 2;  
+	  int y = (screenSize.height - getHeight()) / 2;  
+	    
+	  setLocation(x, y);     
+	 }  
+	  
+	 @Override
+	 public void setSize(Dimension size)  
+	 {  
+	  setSize(size.width, size.height);  
+	 }  
+}  
